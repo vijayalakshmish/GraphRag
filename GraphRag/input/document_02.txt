@@ -1,0 +1,12 @@
+Distributed Systems: Observability
+
+    Observability helps engineering teams understand system behavior.
+    Metrics, logs, and distributed traces provide complementary evidence.
+
+    Latency measures request duration, while error rate measures the
+    proportion of failed requests. Service-level objectives define
+    target reliability for a service over a measurement window.
+
+    A service dashboard can combine latency, error rate, and traffic.
+    Distributed tracing follows a request across services and helps
+    identify which dependency contributes to elevated latency.

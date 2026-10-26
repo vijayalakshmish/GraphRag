@@ -1,0 +1,13 @@
+Distributed Systems: Resilience and Scaling
+
+    A service can become overloaded when incoming traffic exceeds capacity.
+    Rate limiting controls request volume, while load balancing distributes
+    traffic across healthy service instances.
+
+    Retries, exponential backoff, and circuit breakers are resilience
+    patterns. They should be configured together because retries can
+    increase traffic to an already overloaded dependency.
+
+    Monitoring latency, error rate, and traffic helps engineers detect
+    degradation. Scaling capacity may help with sustained load, but it
+    does not fix every source of latency or dependency failure.

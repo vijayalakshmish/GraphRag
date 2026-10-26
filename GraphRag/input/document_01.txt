@@ -1,0 +1,13 @@
+Distributed Systems: Service Reliability
+
+    A distributed system consists of services communicating over a network.
+    Service A calls Service B through an API gateway. The API gateway
+    routes requests and can enforce timeouts and rate limits.
+
+    Retries can improve reliability when transient failures occur.
+    However, uncontrolled retries can increase load and amplify outages.
+    Exponential backoff and jitter reduce synchronized retry attempts.
+
+    Circuit breakers prevent repeated calls to a failing dependency.
+    When the failure rate crosses a configured threshold, the circuit
+    breaker temporarily blocks calls and allows recovery.

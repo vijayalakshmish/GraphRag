@@ -1,0 +1,45 @@
+-Goal-
+Extract a source-grounded knowledge graph from technical engineering text.
+
+-Entity types-
+Use only these entity types: [{entity_types}]
+
+-Extraction rules-
+1. Extract concrete entities explicitly mentioned or clearly described in the source.
+2. Use consistent uppercase entity names. Use the same canonical name for repeated mentions.
+3. Assign each entity exactly one of the supplied types:
+   - system_component: a service, dependency, gateway, or architectural component.
+   - resilience_pattern: a resilience technique such as retries, exponential backoff,
+     circuit breakers, or rate limiting.
+   - observability_signal: a telemetry source such as metrics, logs, or distributed traces.
+   - metric: a measurable signal such as latency, error rate, or traffic.
+   - reliability_target: a stated reliability goal or service-level objective.
+   - engineering_concept: a broad engineering concept such as observability or resilience.
+   - method: an operational method such as load balancing or scaling.
+   - technology: a named technology explicitly supported by the source.
+4. Do not invent technologies, organizations, standards, versions, numerical values,
+   or implementation details absent from the source.
+5. Write concise, informative entity descriptions grounded in the source. If the source
+   provides insufficient detail, do not fabricate a description.
+6. Extract relationships only when the text supports a meaningful connection.
+   Use a clear description explaining the connection, and a numeric strength from 1 to 10.
+7. Do not create a relationship merely because two entities occur in the same paragraph.
+8. Avoid duplicate entities and duplicate relationships.
+9. Return the required GraphRAG entity and relationship tuple format, using ## as
+   the delimiter, and finish with <|COMPLETE|>.
+
+
+-Required output format-
+Return each entity using exactly this tuple structure:
+("entity"<|>ENTITY_NAME<|>ENTITY_TYPE<|>ENTITY_DESCRIPTION)
+
+Return each relationship using exactly this tuple structure:
+("relationship"<|>SOURCE_ENTITY<|>TARGET_ENTITY<|>RELATIONSHIP_DESCRIPTION<|>STRENGTH)
+
+-Output requirements-
+- Replace the placeholders with actual extracted values; do not output the placeholder names.
+- ENTITY_TYPE must be one of the supplied entity types.
+- STRENGTH must be a numeric score from 1 to 10.
+- Separate every tuple with ##.
+- Return only the tuple list and the completion marker, without explanatory prose.
+- Finish the output with <|COMPLETE|>.

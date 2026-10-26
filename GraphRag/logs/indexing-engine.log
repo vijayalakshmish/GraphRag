@@ -1,0 +1,2982 @@
+2026-10-26 09:03:10.0096 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:03:10.0313 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:03:10.0313 - INFO - graphrag.cli.index - Starting pipeline run. True
+2026-10-26 09:03:10.0316 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 1200,
+        "overlap": 100,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "organization",
+            "person",
+            "geo",
+            "event"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:03:10.0317 - INFO - graphrag.cli.index - Dry run complete, exiting...
+2026-10-26 09:03:10.0319 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.20345592498779297,
+  "compute_duration_per_response_seconds": 0.20345592498779297,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 9,
+  "total_tokens": 9,
+  "tokens_per_response": 9.0,
+  "responses_with_cost": 1,
+  "input_cost": 1.35e-06,
+  "total_cost": 1.35e-06,
+  "cost_per_response": 1.35e-06
+}
+2026-10-26 09:03:10.0319 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 1.86738920211792,
+  "compute_duration_per_response_seconds": 1.86738920211792,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 12,
+  "completion_tokens": 2,
+  "total_tokens": 14,
+  "tokens_per_response": 14.0,
+  "responses_with_cost": 1,
+  "input_cost": 3.6e-06,
+  "output_cost": 5e-06,
+  "total_cost": 8.6e-06,
+  "cost_per_response": 8.6e-06
+}
+2026-10-26 09:03:27.0393 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:03:27.0604 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:03:27.0605 - INFO - graphrag.cli.index - Starting pipeline run. True
+2026-10-26 09:03:27.0606 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 100,
+        "overlap": 10,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "organization",
+            "person",
+            "geo",
+            "event"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:03:27.0606 - INFO - graphrag.cli.index - Dry run complete, exiting...
+2026-10-26 09:03:27.0606 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.2014479637145996,
+  "compute_duration_per_response_seconds": 0.2014479637145996,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 9,
+  "total_tokens": 9,
+  "tokens_per_response": 9.0,
+  "responses_with_cost": 1,
+  "input_cost": 1.35e-06,
+  "total_cost": 1.35e-06,
+  "cost_per_response": 1.35e-06
+}
+2026-10-26 09:03:27.0607 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.5223221778869629,
+  "compute_duration_per_response_seconds": 0.5223221778869629,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 12,
+  "completion_tokens": 2,
+  "total_tokens": 14,
+  "tokens_per_response": 14.0,
+  "responses_with_cost": 1,
+  "input_cost": 3.6e-06,
+  "output_cost": 5e-06,
+  "total_cost": 8.6e-06,
+  "cost_per_response": 8.6e-06
+}
+2026-10-26 09:03:36.0850 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:03:37.0058 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:03:37.0058 - INFO - graphrag.cli.index - Starting pipeline run. False
+2026-10-26 09:03:37.0060 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 100,
+        "overlap": 10,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "organization",
+            "person",
+            "geo",
+            "event"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:03:37.0061 - INFO - graphrag.api.index - Initializing indexing pipeline...
+2026-10-26 09:03:37.0061 - INFO - graphrag.index.workflows.factory - Creating pipeline with workflows: ['load_input_documents', 'create_base_text_units', 'create_final_documents', 'extract_graph_nlp', 'prune_graph', 'finalize_graph', 'create_communities', 'create_final_text_units', 'create_community_reports_text', 'generate_text_embeddings']
+2026-10-26 09:03:37.0064 - INFO - graphrag.index.run.run_pipeline - Running standard indexing.
+2026-10-26 09:03:37.0065 - INFO - graphrag.index.run.run_pipeline - Executing pipeline...
+2026-10-26 09:03:37.0082 - INFO - graphrag.index.workflows.load_input_documents - Final # of rows loaded: 3
+2026-10-26 09:03:37.0114 - INFO - graphrag.api.index - Workflow load_input_documents completed successfully
+2026-10-26 09:03:37.0115 - DEBUG - graphrag.api.index -                                                   id  ...  human_readable_id
+0  b9c6f611addc84d60357c829e042254e47efbb01ea0825...  ...                  0
+1  e0290ec1bd64a0f274583511d99c96326f49438a7d0593...  ...                  1
+2  0a2ba140a34c27e2df00d56671272e108252f32cd0a436...  ...                  2
+
+[3 rows x 6 columns]
+2026-10-26 09:03:37.0116 - INFO - graphrag.index.workflows.create_base_text_units - Workflow started: create_base_text_units
+2026-10-26 09:03:38.0409 - INFO - graphrag.index.workflows.create_base_text_units - Starting chunking process for 3 documents
+2026-10-26 09:03:38.0414 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  1/3
+2026-10-26 09:03:38.0415 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  2/3
+2026-10-26 09:03:38.0416 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  3/3
+2026-10-26 09:03:38.0423 - INFO - graphrag.index.workflows.create_base_text_units - Workflow completed: create_base_text_units
+2026-10-26 09:03:38.0450 - INFO - graphrag.api.index - Workflow create_base_text_units completed successfully
+2026-10-26 09:03:38.0450 - DEBUG - graphrag.api.index - [{'id': 'b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold', 'n_tokens': 100}, {'id': 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0', 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'text': '.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'n_tokens': 23}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'document_id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'n_tokens': 97}, {'id': 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it', 'n_tokens': 100}, {'id': 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90', 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'text': ' Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'n_tokens': 23}]
+2026-10-26 09:03:38.0452 - INFO - graphrag.index.workflows.create_final_documents - Workflow started: create_final_documents
+2026-10-26 09:03:38.0475 - INFO - graphrag.index.workflows.create_final_documents - Workflow completed: create_final_documents
+2026-10-26 09:03:38.0475 - INFO - graphrag.api.index - Workflow create_final_documents completed successfully
+2026-10-26 09:03:38.0476 - DEBUG - graphrag.api.index - [{'id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'human_readable_id': 0, 'title': 'document_01.txt', 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'human_readable_id': 1, 'title': 'document_02.txt', 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'text_unit_ids': ['e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}, {'id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'human_readable_id': 2, 'title': 'document_03.txt', 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'text_unit_ids': ['ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}]
+2026-10-26 09:03:38.0476 - INFO - graphrag.index.workflows.extract_graph_nlp - Workflow started: extract_graph_nlp
+2026-10-26 09:03:54.0290 - INFO - graphrag.index.operations.build_noun_graph.build_noun_graph - extract noun phrases progress: 5/5
+2026-10-26 09:03:54.0366 - INFO - graphrag.index.workflows.extract_graph_nlp - Workflow completed: extract_graph_nlp
+2026-10-26 09:03:54.0468 - INFO - graphrag.api.index - Workflow extract_graph_nlp completed successfully
+2026-10-26 09:03:54.0468 - DEBUG - graphrag.api.index - {'entities': [{'title': 'UNCONTROLLED RETRIES', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'TRANSIENT FAILURES', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'RETRY ATTEMPTS', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'RELIABILITY', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'AMPLIFY OUTAGES', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}], 'relationships': [{'source': 'AMPLIFY OUTAGES', 'target': 'API', 'weight': 0.013754413845337382, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'CALLS SERVICE B', 'weight': 0.013754413845337382, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'CIRCUIT BREAKERS', 'weight': 0.009037432713261911, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'DISTRIBUTED SYSTEMS', 'weight': 0.006278175634388534, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'EXPONENTIAL', 'weight': 0.013754413845337382, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}]}
+2026-10-26 09:03:54.0469 - INFO - graphrag.index.workflows.prune_graph - Workflow started: prune_graph
+2026-10-26 09:03:54.0523 - INFO - graphrag.index.workflows.prune_graph - Workflow completed: prune_graph
+2026-10-26 09:03:54.0527 - INFO - graphrag.api.index - Workflow prune_graph completed successfully
+2026-10-26 09:03:54.0529 - DEBUG - graphrag.api.index - {'entities':                   title  frequency  ...         type description
+0  FAILURE RATE CROSSES          2  ...  NOUN PHRASE            
+1      CIRCUIT BREAKERS          2  ...  NOUN PHRASE            
+2            ERROR RATE          2  ...  NOUN PHRASE            
+
+[3 rows x 5 columns], 'relationships':              source  ... description
+0  CIRCUIT BREAKERS  ...            
+1  CIRCUIT BREAKERS  ...            
+
+[2 rows x 5 columns]}
+2026-10-26 09:03:54.0530 - INFO - graphrag.index.workflows.finalize_graph - Workflow started: finalize_graph
+2026-10-26 09:03:54.0559 - INFO - graphrag.index.workflows.finalize_graph - Workflow completed: finalize_graph
+2026-10-26 09:03:54.0559 - INFO - graphrag.api.index - Workflow finalize_graph completed successfully
+2026-10-26 09:03:54.0559 - DEBUG - graphrag.api.index - {'entities': [{'id': 'c1422f9b-4dee-45de-914b-af982169e32f', 'human_readable_id': 0, 'title': 'FAILURE RATE CROSSES', 'type': 'NOUN PHRASE', 'description': '', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0'], 'frequency': 2, 'degree': 1}, {'id': 'b4b8a309-85d2-44f6-9b66-5db3a9aa5e75', 'human_readable_id': 1, 'title': 'CIRCUIT BREAKERS', 'type': 'NOUN PHRASE', 'description': '', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'frequency': 2, 'degree': 2}, {'id': '2bfa1b99-09da-42de-b8f6-406c7da4e832', 'human_readable_id': 2, 'title': 'ERROR RATE', 'type': 'NOUN PHRASE', 'description': '', 'text_unit_ids': ['e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'frequency': 2, 'degree': 1}], 'relationships': [{'id': '1139e482-b5aa-43b7-b6b3-a7826aa5e265', 'human_readable_id': 0, 'source': 'CIRCUIT BREAKERS', 'target': 'FAILURE RATE CROSSES', 'description': '', 'weight': 0.00432045158118644, 'combined_degree': 3, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6']}, {'id': 'bcba8bea-056a-48b5-a4ef-565de620ae0a', 'human_readable_id': 1, 'source': 'CIRCUIT BREAKERS', 'target': 'ERROR RATE', 'description': '', 'weight': 0.00432045158118644, 'combined_degree': 3, 'text_unit_ids': ['ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c']}]}
+2026-10-26 09:03:54.0560 - INFO - graphrag.index.workflows.create_communities - Workflow started: create_communities
+2026-10-26 09:03:54.0724 - INFO - graphrag.index.workflows.create_communities - Workflow completed: create_communities
+2026-10-26 09:03:54.0726 - INFO - graphrag.api.index - Workflow create_communities completed successfully
+2026-10-26 09:03:54.0726 - DEBUG - graphrag.api.index - [{'id': '28fefdf7-374b-4b0a-9920-2983e1ef57b5', 'human_readable_id': 0, 'community': 0, 'level': 0, 'parent': -1, 'children': [], 'title': 'Community 0', 'entity_ids': ['b4b8a309-85d2-44f6-9b66-5db3a9aa5e75', '2bfa1b99-09da-42de-b8f6-406c7da4e832', 'c1422f9b-4dee-45de-914b-af982169e32f'], 'relationship_ids': ['1139e482-b5aa-43b7-b6b3-a7826aa5e265', 'bcba8bea-056a-48b5-a4ef-565de620ae0a'], 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'period': '2026-10-26', 'size': 3}]
+2026-10-26 09:03:54.0728 - INFO - graphrag.index.workflows.create_final_text_units - Workflow started: create_final_text_units
+2026-10-26 09:03:54.0769 - INFO - graphrag.index.workflows.create_final_text_units - Workflow completed: create_final_text_units
+2026-10-26 09:03:54.0770 - INFO - graphrag.api.index - Workflow create_final_text_units completed successfully
+2026-10-26 09:03:54.0770 - DEBUG - graphrag.api.index - [{'id': 'b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'human_readable_id': 0, 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold', 'n_tokens': 100, 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'entity_ids': ['c1422f9b-4dee-45de-914b-af982169e32f', 'b4b8a309-85d2-44f6-9b66-5db3a9aa5e75'], 'relationship_ids': ['1139e482-b5aa-43b7-b6b3-a7826aa5e265'], 'covariate_ids': []}, {'id': 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0', 'human_readable_id': 1, 'text': '.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'n_tokens': 23, 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'entity_ids': ['c1422f9b-4dee-45de-914b-af982169e32f'], 'relationship_ids': [], 'covariate_ids': []}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'human_readable_id': 2, 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'n_tokens': 97, 'document_id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'entity_ids': ['2bfa1b99-09da-42de-b8f6-406c7da4e832'], 'relationship_ids': [], 'covariate_ids': []}, {'id': 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'human_readable_id': 3, 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it', 'n_tokens': 100, 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'entity_ids': ['b4b8a309-85d2-44f6-9b66-5db3a9aa5e75', '2bfa1b99-09da-42de-b8f6-406c7da4e832'], 'relationship_ids': ['bcba8bea-056a-48b5-a4ef-565de620ae0a'], 'covariate_ids': []}, {'id': 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90', 'human_readable_id': 4, 'text': ' Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'n_tokens': 23, 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'entity_ids': [], 'relationship_ids': [], 'covariate_ids': []}]
+2026-10-26 09:03:54.0771 - INFO - graphrag.index.workflows.create_community_reports_text - Workflow started: create_community_reports_text
+2026-10-26 09:04:06.0377 - INFO - graphrag.logger.progress - level 0 summarize communities progress: 1/1
+2026-10-26 09:04:06.0409 - INFO - graphrag.index.workflows.create_community_reports_text - Workflow completed: create_community_reports_text
+2026-10-26 09:04:06.0482 - INFO - graphrag.api.index - Workflow create_community_reports_text completed successfully
+2026-10-26 09:04:06.0483 - DEBUG - graphrag.api.index -                                                   id  ...  size
+0  cbb96201fb49cedcb52318813672f7eb857b060318c638...  ...     3
+
+[1 rows x 15 columns]
+2026-10-26 09:04:06.0484 - INFO - graphrag.index.workflows.generate_text_embeddings - Workflow started: generate_text_embeddings
+2026-10-26 09:04:06.0501 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedding the following fields: ['entity_description', 'community_full_content', 'text_unit_text']
+2026-10-26 09:04:13.0056 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 3 inputs via 3 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:04:13.0277 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:04:13.0293 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 3 rows for entity_description
+2026-10-26 09:04:13.0323 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 1 inputs via 1 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:04:13.0537 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:04:13.0546 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 1 rows for community_full_content
+2026-10-26 09:04:13.0573 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 5 inputs via 5 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:04:13.0885 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:04:13.0908 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 5 rows for text_unit_text
+2026-10-26 09:04:13.0908 - INFO - graphrag.index.workflows.generate_text_embeddings - Workflow completed: generate_text_embeddings
+2026-10-26 09:04:13.0962 - INFO - graphrag.api.index - Workflow generate_text_embeddings completed successfully
+2026-10-26 09:04:13.0963 - DEBUG - graphrag.api.index - None
+2026-10-26 09:04:13.0965 - INFO - graphrag.index.run.run_pipeline - Indexing pipeline complete.
+2026-10-26 09:04:13.0967 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 4,
+  "successful_response_count": 4,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.7402796745300293,
+  "compute_duration_per_response_seconds": 0.18506991863250732,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 4,
+  "prompt_tokens": 581,
+  "total_tokens": 581,
+  "tokens_per_response": 145.25,
+  "responses_with_cost": 4,
+  "input_cost": 8.715e-05,
+  "total_cost": 8.715e-05,
+  "cost_per_response": 2.17875e-05
+}
+2026-10-26 09:04:13.0967 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 2,
+  "successful_response_count": 2,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 11.683762311935425,
+  "compute_duration_per_response_seconds": 5.841881155967712,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 2,
+  "prompt_tokens": 1964,
+  "completion_tokens": 318,
+  "total_tokens": 2282,
+  "tokens_per_response": 1141.0,
+  "responses_with_cost": 2,
+  "input_cost": 0.0005891999999999999,
+  "output_cost": 0.000795,
+  "total_cost": 0.0013842,
+  "cost_per_response": 0.0006921
+}
+2026-10-26 09:06:37.0673 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:06:37.0873 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:06:37.0874 - INFO - graphrag.cli.index - Starting pipeline run. True
+2026-10-26 09:06:37.0875 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 100,
+        "overlap": 10,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "technology",
+            "system_component",
+            "engineering_concept",
+            "metric",
+            "method",
+            "organization",
+            "standard"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:06:37.0875 - INFO - graphrag.cli.index - Dry run complete, exiting...
+2026-10-26 09:06:37.0876 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.19280242919921875,
+  "compute_duration_per_response_seconds": 0.19280242919921875,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 9,
+  "total_tokens": 9,
+  "tokens_per_response": 9.0,
+  "responses_with_cost": 1,
+  "input_cost": 1.35e-06,
+  "total_cost": 1.35e-06,
+  "cost_per_response": 1.35e-06
+}
+2026-10-26 09:06:37.0876 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.3518376350402832,
+  "compute_duration_per_response_seconds": 0.3518376350402832,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 12,
+  "completion_tokens": 2,
+  "total_tokens": 14,
+  "tokens_per_response": 14.0,
+  "responses_with_cost": 1,
+  "input_cost": 3.6e-06,
+  "output_cost": 5e-06,
+  "total_cost": 8.6e-06,
+  "cost_per_response": 8.6e-06
+}
+2026-10-26 09:06:48.0522 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:06:48.0683 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:06:48.0684 - INFO - graphrag.cli.index - Starting pipeline run. False
+2026-10-26 09:06:48.0685 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 100,
+        "overlap": 10,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "technology",
+            "system_component",
+            "engineering_concept",
+            "metric",
+            "method",
+            "organization",
+            "standard"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:06:48.0686 - INFO - graphrag.api.index - Initializing indexing pipeline...
+2026-10-26 09:06:48.0686 - INFO - graphrag.index.workflows.factory - Creating pipeline with workflows: ['load_input_documents', 'create_base_text_units', 'create_final_documents', 'extract_graph_nlp', 'prune_graph', 'finalize_graph', 'create_communities', 'create_final_text_units', 'create_community_reports_text', 'generate_text_embeddings']
+2026-10-26 09:06:48.0689 - INFO - graphrag.index.run.run_pipeline - Running standard indexing.
+2026-10-26 09:06:48.0690 - INFO - graphrag.index.run.run_pipeline - Executing pipeline...
+2026-10-26 09:06:48.0706 - INFO - graphrag.index.workflows.load_input_documents - Final # of rows loaded: 3
+2026-10-26 09:06:48.0741 - INFO - graphrag.api.index - Workflow load_input_documents completed successfully
+2026-10-26 09:06:48.0742 - DEBUG - graphrag.api.index -                                                   id  ...  human_readable_id
+0  b9c6f611addc84d60357c829e042254e47efbb01ea0825...  ...                  0
+1  e0290ec1bd64a0f274583511d99c96326f49438a7d0593...  ...                  1
+2  0a2ba140a34c27e2df00d56671272e108252f32cd0a436...  ...                  2
+
+[3 rows x 6 columns]
+2026-10-26 09:06:48.0743 - INFO - graphrag.index.workflows.create_base_text_units - Workflow started: create_base_text_units
+2026-10-26 09:06:49.0949 - INFO - graphrag.index.workflows.create_base_text_units - Starting chunking process for 3 documents
+2026-10-26 09:06:49.0953 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  1/3
+2026-10-26 09:06:49.0954 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  2/3
+2026-10-26 09:06:49.0955 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  3/3
+2026-10-26 09:06:49.0962 - INFO - graphrag.index.workflows.create_base_text_units - Workflow completed: create_base_text_units
+2026-10-26 09:06:49.0996 - INFO - graphrag.api.index - Workflow create_base_text_units completed successfully
+2026-10-26 09:06:49.0996 - DEBUG - graphrag.api.index - [{'id': 'b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold', 'n_tokens': 100}, {'id': 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0', 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'text': '.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'n_tokens': 23}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'document_id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'n_tokens': 97}, {'id': 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it', 'n_tokens': 100}, {'id': 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90', 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'text': ' Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'n_tokens': 23}]
+2026-10-26 09:06:49.0997 - INFO - graphrag.index.workflows.create_final_documents - Workflow started: create_final_documents
+2026-10-26 09:06:50.0029 - INFO - graphrag.index.workflows.create_final_documents - Workflow completed: create_final_documents
+2026-10-26 09:06:50.0030 - INFO - graphrag.api.index - Workflow create_final_documents completed successfully
+2026-10-26 09:06:50.0030 - DEBUG - graphrag.api.index - [{'id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'human_readable_id': 0, 'title': 'document_01.txt', 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'human_readable_id': 1, 'title': 'document_02.txt', 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'text_unit_ids': ['e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}, {'id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'human_readable_id': 2, 'title': 'document_03.txt', 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'text_unit_ids': ['ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}]
+2026-10-26 09:06:50.0033 - INFO - graphrag.index.workflows.extract_graph_nlp - Workflow started: extract_graph_nlp
+2026-10-26 09:06:50.0076 - INFO - graphrag.index.operations.build_noun_graph.build_noun_graph - extract noun phrases progress: 5/5
+2026-10-26 09:06:50.0140 - INFO - graphrag.index.workflows.extract_graph_nlp - Workflow completed: extract_graph_nlp
+2026-10-26 09:06:50.0141 - INFO - graphrag.api.index - Workflow extract_graph_nlp completed successfully
+2026-10-26 09:06:50.0141 - DEBUG - graphrag.api.index - {'entities': [{'title': 'UNCONTROLLED RETRIES', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'TRANSIENT FAILURES', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'RETRY ATTEMPTS', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'RELIABILITY', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}, {'title': 'AMPLIFY OUTAGES', 'frequency': 1, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'type': 'NOUN PHRASE', 'description': ''}], 'relationships': [{'source': 'AMPLIFY OUTAGES', 'target': 'API', 'weight': 0.013754413845337382, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'CALLS SERVICE B', 'weight': 0.013754413845337382, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'CIRCUIT BREAKERS', 'weight': 0.009037432713261911, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'DISTRIBUTED SYSTEMS', 'weight': 0.006278175634388534, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}, {'source': 'AMPLIFY OUTAGES', 'target': 'EXPONENTIAL', 'weight': 0.013754413845337382, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'description': ''}]}
+2026-10-26 09:06:50.0142 - INFO - graphrag.index.workflows.prune_graph - Workflow started: prune_graph
+2026-10-26 09:06:50.0205 - INFO - graphrag.index.workflows.prune_graph - Workflow completed: prune_graph
+2026-10-26 09:06:50.0209 - INFO - graphrag.api.index - Workflow prune_graph completed successfully
+2026-10-26 09:06:50.0212 - DEBUG - graphrag.api.index - {'entities':                   title  frequency  ...         type description
+0  FAILURE RATE CROSSES          2  ...  NOUN PHRASE            
+1      CIRCUIT BREAKERS          2  ...  NOUN PHRASE            
+2            ERROR RATE          2  ...  NOUN PHRASE            
+
+[3 rows x 5 columns], 'relationships':              source  ... description
+0  CIRCUIT BREAKERS  ...            
+1  CIRCUIT BREAKERS  ...            
+
+[2 rows x 5 columns]}
+2026-10-26 09:06:50.0213 - INFO - graphrag.index.workflows.finalize_graph - Workflow started: finalize_graph
+2026-10-26 09:06:50.0250 - INFO - graphrag.index.workflows.finalize_graph - Workflow completed: finalize_graph
+2026-10-26 09:06:50.0251 - INFO - graphrag.api.index - Workflow finalize_graph completed successfully
+2026-10-26 09:06:50.0251 - DEBUG - graphrag.api.index - {'entities': [{'id': '595a7766-9174-47f8-98e8-8a3dd241f2b7', 'human_readable_id': 0, 'title': 'FAILURE RATE CROSSES', 'type': 'NOUN PHRASE', 'description': '', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0'], 'frequency': 2, 'degree': 1}, {'id': '41e80725-161c-4bcc-842c-5c652a31db43', 'human_readable_id': 1, 'title': 'CIRCUIT BREAKERS', 'type': 'NOUN PHRASE', 'description': '', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'frequency': 2, 'degree': 2}, {'id': 'b50891fd-7d9d-4318-9477-b1026f124518', 'human_readable_id': 2, 'title': 'ERROR RATE', 'type': 'NOUN PHRASE', 'description': '', 'text_unit_ids': ['e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'frequency': 2, 'degree': 1}], 'relationships': [{'id': 'b3290308-d688-4727-b5ae-2b9dc769df15', 'human_readable_id': 0, 'source': 'CIRCUIT BREAKERS', 'target': 'FAILURE RATE CROSSES', 'description': '', 'weight': 0.00432045158118644, 'combined_degree': 3, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6']}, {'id': 'f6049a11-3df8-4cc9-911d-21a21fce1cb9', 'human_readable_id': 1, 'source': 'CIRCUIT BREAKERS', 'target': 'ERROR RATE', 'description': '', 'weight': 0.00432045158118644, 'combined_degree': 3, 'text_unit_ids': ['ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c']}]}
+2026-10-26 09:06:50.0252 - INFO - graphrag.index.workflows.create_communities - Workflow started: create_communities
+2026-10-26 09:06:50.0459 - INFO - graphrag.index.workflows.create_communities - Workflow completed: create_communities
+2026-10-26 09:06:50.0462 - INFO - graphrag.api.index - Workflow create_communities completed successfully
+2026-10-26 09:06:50.0462 - DEBUG - graphrag.api.index - [{'id': 'a65c85e3-e56d-48f2-8859-693d180c2852', 'human_readable_id': 0, 'community': 0, 'level': 0, 'parent': -1, 'children': [], 'title': 'Community 0', 'entity_ids': ['41e80725-161c-4bcc-842c-5c652a31db43', 'b50891fd-7d9d-4318-9477-b1026f124518', '595a7766-9174-47f8-98e8-8a3dd241f2b7'], 'relationship_ids': ['b3290308-d688-4727-b5ae-2b9dc769df15', 'f6049a11-3df8-4cc9-911d-21a21fce1cb9'], 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'period': '2026-10-26', 'size': 3}]
+2026-10-26 09:06:50.0463 - INFO - graphrag.index.workflows.create_final_text_units - Workflow started: create_final_text_units
+2026-10-26 09:06:50.0504 - INFO - graphrag.index.workflows.create_final_text_units - Workflow completed: create_final_text_units
+2026-10-26 09:06:50.0505 - INFO - graphrag.api.index - Workflow create_final_text_units completed successfully
+2026-10-26 09:06:50.0505 - DEBUG - graphrag.api.index - [{'id': 'b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'human_readable_id': 0, 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold', 'n_tokens': 100, 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'entity_ids': ['595a7766-9174-47f8-98e8-8a3dd241f2b7', '41e80725-161c-4bcc-842c-5c652a31db43'], 'relationship_ids': ['b3290308-d688-4727-b5ae-2b9dc769df15'], 'covariate_ids': []}, {'id': 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0', 'human_readable_id': 1, 'text': '.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'n_tokens': 23, 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'entity_ids': ['595a7766-9174-47f8-98e8-8a3dd241f2b7'], 'relationship_ids': [], 'covariate_ids': []}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'human_readable_id': 2, 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'n_tokens': 97, 'document_id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'entity_ids': ['b50891fd-7d9d-4318-9477-b1026f124518'], 'relationship_ids': [], 'covariate_ids': []}, {'id': 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'human_readable_id': 3, 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it', 'n_tokens': 100, 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'entity_ids': ['41e80725-161c-4bcc-842c-5c652a31db43', 'b50891fd-7d9d-4318-9477-b1026f124518'], 'relationship_ids': ['f6049a11-3df8-4cc9-911d-21a21fce1cb9'], 'covariate_ids': []}, {'id': 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90', 'human_readable_id': 4, 'text': ' Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'n_tokens': 23, 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'entity_ids': [], 'relationship_ids': [], 'covariate_ids': []}]
+2026-10-26 09:06:50.0506 - INFO - graphrag.index.workflows.create_community_reports_text - Workflow started: create_community_reports_text
+2026-10-26 09:06:51.0008 - INFO - graphrag.logger.progress - level 0 summarize communities progress: 1/1
+2026-10-26 09:06:51.0041 - INFO - graphrag.index.workflows.create_community_reports_text - Workflow completed: create_community_reports_text
+2026-10-26 09:06:51.0048 - INFO - graphrag.api.index - Workflow create_community_reports_text completed successfully
+2026-10-26 09:06:51.0051 - DEBUG - graphrag.api.index -                                                   id  ...  size
+0  cbb96201fb49cedcb52318813672f7eb857b060318c638...  ...     3
+
+[1 rows x 15 columns]
+2026-10-26 09:06:51.0052 - INFO - graphrag.index.workflows.generate_text_embeddings - Workflow started: generate_text_embeddings
+2026-10-26 09:06:51.0080 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedding the following fields: ['entity_description', 'community_full_content', 'text_unit_text']
+2026-10-26 09:06:58.0163 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 3 inputs via 3 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:06:58.0192 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:06:58.0209 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 3 rows for entity_description
+2026-10-26 09:06:58.0238 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 1 inputs via 1 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:06:58.0271 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:06:58.0280 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 1 rows for community_full_content
+2026-10-26 09:06:58.0310 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 5 inputs via 5 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:06:58.0384 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:06:58.0410 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 5 rows for text_unit_text
+2026-10-26 09:06:58.0411 - INFO - graphrag.index.workflows.generate_text_embeddings - Workflow completed: generate_text_embeddings
+2026-10-26 09:06:58.0462 - INFO - graphrag.api.index - Workflow generate_text_embeddings completed successfully
+2026-10-26 09:06:58.0463 - DEBUG - graphrag.api.index - None
+2026-10-26 09:06:58.0464 - INFO - graphrag.index.run.run_pipeline - Indexing pipeline complete.
+2026-10-26 09:06:58.0466 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 4,
+  "successful_response_count": 4,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.6936295032501221,
+  "compute_duration_per_response_seconds": 0.17340737581253052,
+  "cached_responses": 3,
+  "cache_hit_rate": 0.75,
+  "streaming_responses": 0,
+  "responses_with_tokens": 4,
+  "prompt_tokens": 581,
+  "total_tokens": 581,
+  "tokens_per_response": 145.25,
+  "responses_with_cost": 4,
+  "input_cost": 8.715e-05,
+  "total_cost": 8.715e-05,
+  "cost_per_response": 2.17875e-05
+}
+2026-10-26 09:06:58.0466 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 2,
+  "successful_response_count": 2,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 12.463398694992065,
+  "compute_duration_per_response_seconds": 6.231699347496033,
+  "cached_responses": 1,
+  "cache_hit_rate": 0.5,
+  "streaming_responses": 0,
+  "responses_with_tokens": 2,
+  "prompt_tokens": 1964,
+  "completion_tokens": 318,
+  "total_tokens": 2282,
+  "tokens_per_response": 1141.0,
+  "responses_with_cost": 2,
+  "input_cost": 0.0005891999999999999,
+  "output_cost": 0.000795,
+  "total_cost": 0.0013842,
+  "cost_per_response": 0.0006921
+}
+2026-10-26 09:07:08.0441 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:07:08.0635 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:07:08.0635 - INFO - graphrag.cli.index - Starting pipeline run. True
+2026-10-26 09:07:08.0637 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 100,
+        "overlap": 10,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "technology",
+            "system_component",
+            "engineering_concept",
+            "metric",
+            "method",
+            "organization",
+            "standard"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:07:08.0637 - INFO - graphrag.cli.index - Dry run complete, exiting...
+2026-10-26 09:07:08.0637 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.1853327751159668,
+  "compute_duration_per_response_seconds": 0.1853327751159668,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 9,
+  "total_tokens": 9,
+  "tokens_per_response": 9.0,
+  "responses_with_cost": 1,
+  "input_cost": 1.35e-06,
+  "total_cost": 1.35e-06,
+  "cost_per_response": 1.35e-06
+}
+2026-10-26 09:07:08.0638 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 1,
+  "successful_response_count": 1,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 0.6111397743225098,
+  "compute_duration_per_response_seconds": 0.6111397743225098,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 1,
+  "prompt_tokens": 12,
+  "completion_tokens": 2,
+  "total_tokens": 14,
+  "tokens_per_response": 14.0,
+  "responses_with_cost": 1,
+  "input_cost": 3.6e-06,
+  "output_cost": 5e-06,
+  "total_cost": 8.6e-06,
+  "cost_per_response": 8.6e-06
+}
+2026-10-26 09:07:19.0141 - INFO - graphrag.index.validate_config - LLM Config Params Validated
+2026-10-26 09:07:19.0339 - INFO - graphrag.index.validate_config - Embedding LLM Config Params Validated
+2026-10-26 09:07:19.0339 - INFO - graphrag.cli.index - Starting pipeline run. False
+2026-10-26 09:07:19.0340 - INFO - graphrag.cli.index - Using default configuration: {
+    "completion_models": {
+        "default_completion_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-3.5-flash-lite",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "embedding_models": {
+        "default_embedding_model": {
+            "type": "litellm",
+            "model_provider": "gemini",
+            "model": "gemini-embedding-001",
+            "call_args": {},
+            "api_base": null,
+            "api_version": null,
+            "api_key": "==== REDACTED ====",
+            "auth_method": "api_key",
+            "azure_deployment_name": null,
+            "retry": {
+                "type": "exponential_backoff",
+                "max_retries": null,
+                "base_delay": null,
+                "jitter": null,
+                "max_delay": null
+            },
+            "rate_limit": null,
+            "metrics": {
+                "type": "default",
+                "store": "memory",
+                "writer": "log",
+                "log_level": null,
+                "base_dir": null
+            },
+            "mock_responses": []
+        }
+    },
+    "concurrent_requests": 25,
+    "async_mode": "threaded",
+    "input": {
+        "type": "text",
+        "encoding": null,
+        "file_pattern": null,
+        "id_column": null,
+        "title_column": null,
+        "text_column": null
+    },
+    "input_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/input",
+        "account_url": null,
+        "database_name": null
+    },
+    "chunking": {
+        "type": "tokens",
+        "encoding_model": "o200k_base",
+        "size": 100,
+        "overlap": 10,
+        "prepend_metadata": null
+    },
+    "output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/output",
+        "account_url": null,
+        "database_name": null
+    },
+    "update_output_storage": {
+        "type": "file",
+        "encoding": null,
+        "base_dir": "/content/graphrag-research-intelligence/update_output",
+        "account_url": null,
+        "database_name": null
+    },
+    "table_provider": {
+        "type": "parquet",
+        "legacy_container": null,
+        "batch_size": 50
+    },
+    "cache": {
+        "type": "json",
+        "storage": {
+            "type": "file",
+            "encoding": null,
+            "base_dir": "cache",
+            "account_url": null,
+            "database_name": null
+        },
+        "database_name": "cache.db"
+    },
+    "reporting": {
+        "type": "file",
+        "base_dir": "/content/graphrag-research-intelligence/logs",
+        "account_url": null
+    },
+    "vector_store": {
+        "type": "lancedb",
+        "db_uri": "/content/graphrag-research-intelligence/output/lancedb",
+        "url": null,
+        "audience": null,
+        "database_name": null,
+        "vector_size": 3072,
+        "index_schema": {
+            "community_full_content": {
+                "index_name": "community_full_content",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "text_unit_text": {
+                "index_name": "text_unit_text",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            },
+            "entity_description": {
+                "index_name": "entity_description",
+                "id_field": "id",
+                "vector_field": "vector",
+                "vector_size": 3072,
+                "fields": {}
+            }
+        }
+    },
+    "workflows": null,
+    "embed_text": {
+        "embedding_model_id": "default_embedding_model",
+        "model_instance_name": "text_embedding",
+        "batch_size": 16,
+        "batch_max_tokens": 8191,
+        "names": [
+            "entity_description",
+            "community_full_content",
+            "text_unit_text"
+        ]
+    },
+    "extract_graph": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_graph",
+        "prompt": "prompts/extract_graph.txt",
+        "entity_types": [
+            "technology",
+            "system_component",
+            "engineering_concept",
+            "metric",
+            "method",
+            "organization",
+            "standard"
+        ],
+        "max_gleanings": 1
+    },
+    "summarize_descriptions": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "summarize_descriptions",
+        "prompt": "prompts/summarize_descriptions.txt",
+        "max_length": 500,
+        "max_input_tokens": 4000
+    },
+    "extract_graph_nlp": {
+        "normalize_edge_weights": true,
+        "text_analyzer": {
+            "extractor_type": "regex_english",
+            "model_name": "en_core_web_md",
+            "max_word_length": 15,
+            "word_delimiter": " ",
+            "include_named_entities": true,
+            "exclude_nouns": [
+                "stuff",
+                "thing",
+                "things",
+                "bunch",
+                "bit",
+                "bits",
+                "people",
+                "person",
+                "okay",
+                "hey",
+                "hi",
+                "hello",
+                "laughter",
+                "oh"
+            ],
+            "exclude_entity_tags": [
+                "DATE"
+            ],
+            "exclude_pos_tags": [
+                "DET",
+                "PRON",
+                "INTJ",
+                "X"
+            ],
+            "noun_phrase_tags": [
+                "PROPN",
+                "NOUNS"
+            ],
+            "noun_phrase_grammars": {
+                "PROPN,PROPN": "PROPN",
+                "NOUN,NOUN": "NOUNS",
+                "NOUNS,NOUN": "NOUNS",
+                "ADJ,ADJ": "ADJ",
+                "ADJ,NOUN": "NOUNS"
+            }
+        },
+        "concurrent_requests": 25,
+        "async_mode": "threaded"
+    },
+    "prune_graph": {
+        "min_node_freq": 2,
+        "max_node_freq_std": null,
+        "min_node_degree": 1,
+        "max_node_degree_std": null,
+        "min_edge_weight_pct": 40.0,
+        "remove_ego_nodes": true,
+        "lcc_only": false
+    },
+    "cluster_graph": {
+        "max_cluster_size": 10,
+        "use_lcc": true,
+        "seed": 3735928559
+    },
+    "extract_claims": {
+        "enabled": false,
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "extract_claims",
+        "prompt": "prompts/extract_claims.txt",
+        "description": "Any claims or facts that could be relevant to information discovery.",
+        "max_gleanings": 1
+    },
+    "community_reports": {
+        "completion_model_id": "default_completion_model",
+        "model_instance_name": "community_reporting",
+        "graph_prompt": "prompts/community_report_graph.txt",
+        "text_prompt": "prompts/community_report_text.txt",
+        "max_length": 2000,
+        "max_input_length": 8000
+    },
+    "snapshots": {
+        "embeddings": false,
+        "graphml": false,
+        "raw_graph": false
+    },
+    "local_search": {
+        "prompt": "prompts/local_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "text_unit_prop": 0.5,
+        "community_prop": 0.15,
+        "conversation_history_max_turns": 5,
+        "top_k_entities": 10,
+        "top_k_relationships": 10,
+        "max_context_tokens": 12000
+    },
+    "global_search": {
+        "map_prompt": "prompts/global_search_map_system_prompt.txt",
+        "reduce_prompt": "prompts/global_search_reduce_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "knowledge_prompt": "prompts/global_search_knowledge_system_prompt.txt",
+        "max_context_tokens": 12000,
+        "data_max_tokens": 12000,
+        "map_max_length": 1000,
+        "reduce_max_length": 2000,
+        "dynamic_search_threshold": 1,
+        "dynamic_search_keep_parent": false,
+        "dynamic_search_num_repeats": 1,
+        "dynamic_search_use_summary": false,
+        "dynamic_search_max_level": 2
+    },
+    "drift_search": {
+        "prompt": "prompts/drift_search_system_prompt.txt",
+        "reduce_prompt": "prompts/drift_search_reduce_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "data_max_tokens": 12000,
+        "reduce_max_tokens": null,
+        "reduce_temperature": 0,
+        "reduce_max_completion_tokens": null,
+        "concurrency": 32,
+        "drift_k_followups": 20,
+        "primer_folds": 5,
+        "primer_llm_max_tokens": 12000,
+        "n_depth": 3,
+        "local_search_text_unit_prop": 0.9,
+        "local_search_community_prop": 0.1,
+        "local_search_top_k_mapped_entities": 10,
+        "local_search_top_k_relationships": 10,
+        "local_search_max_data_tokens": 12000,
+        "local_search_temperature": 0,
+        "local_search_top_p": 1,
+        "local_search_n": 1,
+        "local_search_llm_max_gen_tokens": null,
+        "local_search_llm_max_gen_completion_tokens": null
+    },
+    "basic_search": {
+        "prompt": "prompts/basic_search_system_prompt.txt",
+        "completion_model_id": "default_completion_model",
+        "embedding_model_id": "default_embedding_model",
+        "k": 10,
+        "max_context_tokens": 12000
+    }
+}
+2026-10-26 09:07:19.0341 - INFO - graphrag.api.index - Initializing indexing pipeline...
+2026-10-26 09:07:19.0341 - INFO - graphrag.index.workflows.factory - Creating pipeline with workflows: ['load_input_documents', 'create_base_text_units', 'create_final_documents', 'extract_graph', 'finalize_graph', 'extract_covariates', 'create_communities', 'create_final_text_units', 'create_community_reports', 'generate_text_embeddings']
+2026-10-26 09:07:19.0344 - INFO - graphrag.index.run.run_pipeline - Running standard indexing.
+2026-10-26 09:07:19.0345 - INFO - graphrag.index.run.run_pipeline - Executing pipeline...
+2026-10-26 09:07:19.0361 - INFO - graphrag.index.workflows.load_input_documents - Final # of rows loaded: 3
+2026-10-26 09:07:19.0391 - INFO - graphrag.api.index - Workflow load_input_documents completed successfully
+2026-10-26 09:07:19.0393 - DEBUG - graphrag.api.index -                                                   id  ...  human_readable_id
+0  b9c6f611addc84d60357c829e042254e47efbb01ea0825...  ...                  0
+1  e0290ec1bd64a0f274583511d99c96326f49438a7d0593...  ...                  1
+2  0a2ba140a34c27e2df00d56671272e108252f32cd0a436...  ...                  2
+
+[3 rows x 6 columns]
+2026-10-26 09:07:19.0394 - INFO - graphrag.index.workflows.create_base_text_units - Workflow started: create_base_text_units
+2026-10-26 09:07:20.0580 - INFO - graphrag.index.workflows.create_base_text_units - Starting chunking process for 3 documents
+2026-10-26 09:07:20.0583 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  1/3
+2026-10-26 09:07:20.0584 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  2/3
+2026-10-26 09:07:20.0585 - INFO - graphrag.index.workflows.create_base_text_units - chunker progress:  3/3
+2026-10-26 09:07:20.0591 - INFO - graphrag.index.workflows.create_base_text_units - Workflow completed: create_base_text_units
+2026-10-26 09:07:20.0618 - INFO - graphrag.api.index - Workflow create_base_text_units completed successfully
+2026-10-26 09:07:20.0618 - DEBUG - graphrag.api.index - [{'id': 'b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold', 'n_tokens': 100}, {'id': 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0', 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'text': '.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'n_tokens': 23}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'document_id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'n_tokens': 97}, {'id': 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it', 'n_tokens': 100}, {'id': 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90', 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'text': ' Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'n_tokens': 23}]
+2026-10-26 09:07:20.0619 - INFO - graphrag.index.workflows.create_final_documents - Workflow started: create_final_documents
+2026-10-26 09:07:20.0642 - INFO - graphrag.index.workflows.create_final_documents - Workflow completed: create_final_documents
+2026-10-26 09:07:20.0642 - INFO - graphrag.api.index - Workflow create_final_documents completed successfully
+2026-10-26 09:07:20.0643 - DEBUG - graphrag.api.index - [{'id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'human_readable_id': 0, 'title': 'document_01.txt', 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'human_readable_id': 1, 'title': 'document_02.txt', 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'text_unit_ids': ['e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}, {'id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'human_readable_id': 2, 'title': 'document_03.txt', 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'text_unit_ids': ['ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90'], 'creation_date': '2026-10-26 08:59:36 +0000', 'raw_data': None}]
+2026-10-26 09:07:20.0643 - INFO - graphrag.index.workflows.extract_graph - Workflow started: extract_graph
+2026-10-26 09:07:23.0120 - INFO - graphrag.logger.progress - extract graph progress: 1/5
+2026-10-26 09:07:23.0341 - INFO - graphrag.logger.progress - extract graph progress: 2/5
+2026-10-26 09:07:24.0108 - INFO - graphrag.logger.progress - extract graph progress: 3/5
+2026-10-26 09:07:24.0602 - INFO - graphrag.logger.progress - extract graph progress: 4/5
+2026-10-26 09:07:25.0390 - INFO - graphrag.logger.progress - extract graph progress: 5/5
+2026-10-26 09:07:25.0463 - WARNING - graphrag.index.operations.extract_graph.utils - Dropped 3 relationship(s) referencing non-existent entities.
+2026-10-26 09:07:25.0467 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 1/67
+2026-10-26 09:07:25.0499 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 2/67
+2026-10-26 09:07:25.0499 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 3/67
+2026-10-26 09:07:25.0516 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 4/67
+2026-10-26 09:07:25.0516 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 5/67
+2026-10-26 09:07:25.0516 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 6/67
+2026-10-26 09:07:25.0517 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 7/67
+2026-10-26 09:07:25.0517 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 8/67
+2026-10-26 09:07:25.0517 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 9/67
+2026-10-26 09:07:25.0517 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 10/67
+2026-10-26 09:07:25.0518 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 11/67
+2026-10-26 09:07:25.0518 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 12/67
+2026-10-26 09:07:25.0518 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 13/67
+2026-10-26 09:07:25.0518 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 14/67
+2026-10-26 09:07:25.0518 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 15/67
+2026-10-26 09:07:25.0518 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 16/67
+2026-10-26 09:07:25.0519 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 17/67
+2026-10-26 09:07:25.0519 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 18/67
+2026-10-26 09:07:25.0519 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 19/67
+2026-10-26 09:07:25.0548 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 20/67
+2026-10-26 09:07:25.0548 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 21/67
+2026-10-26 09:07:25.0578 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 22/67
+2026-10-26 09:07:25.0579 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 23/67
+2026-10-26 09:07:25.0580 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 24/67
+2026-10-26 09:07:25.0581 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 25/67
+2026-10-26 09:07:25.0581 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 26/67
+2026-10-26 09:07:25.0581 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 27/67
+2026-10-26 09:07:25.0606 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 28/67
+2026-10-26 09:07:25.0606 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 29/67
+2026-10-26 09:07:26.0235 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 30/67
+2026-10-26 09:07:26.0236 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 31/67
+2026-10-26 09:07:26.0237 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 32/67
+2026-10-26 09:07:26.0289 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 33/67
+2026-10-26 09:07:26.0309 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 34/67
+2026-10-26 09:07:26.0404 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 35/67
+2026-10-26 09:07:59.0539 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 36/67
+2026-10-26 09:07:59.0545 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 37/67
+2026-10-26 09:07:59.0569 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 38/67
+2026-10-26 09:07:59.0570 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 39/67
+2026-10-26 09:07:59.0570 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 40/67
+2026-10-26 09:07:59.0571 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 41/67
+2026-10-26 09:07:59.0571 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 42/67
+2026-10-26 09:07:59.0571 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 43/67
+2026-10-26 09:07:59.0572 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 44/67
+2026-10-26 09:07:59.0572 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 45/67
+2026-10-26 09:07:59.0573 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 46/67
+2026-10-26 09:07:59.0573 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 47/67
+2026-10-26 09:07:59.0574 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 48/67
+2026-10-26 09:07:59.0574 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 49/67
+2026-10-26 09:07:59.0574 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 50/67
+2026-10-26 09:07:59.0575 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 51/67
+2026-10-26 09:07:59.0575 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 52/67
+2026-10-26 09:07:59.0575 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 53/67
+2026-10-26 09:07:59.0575 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 54/67
+2026-10-26 09:07:59.0576 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 55/67
+2026-10-26 09:07:59.0576 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 56/67
+2026-10-26 09:07:59.0576 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 57/67
+2026-10-26 09:07:59.0577 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 58/67
+2026-10-26 09:07:59.0577 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 59/67
+2026-10-26 09:07:59.0577 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 60/67
+2026-10-26 09:07:59.0577 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 61/67
+2026-10-26 09:07:59.0578 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 62/67
+2026-10-26 09:07:59.0578 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 63/67
+2026-10-26 09:07:59.0578 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 64/67
+2026-10-26 09:07:59.0579 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 65/67
+2026-10-26 09:07:59.0579 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 66/67
+2026-10-26 09:08:00.0106 - INFO - graphrag.logger.progress - Summarize entity/relationship description progress: 67/67
+2026-10-26 09:08:00.0144 - INFO - graphrag.index.workflows.extract_graph - Workflow completed: extract_graph
+2026-10-26 09:08:00.0163 - INFO - graphrag.api.index - Workflow extract_graph completed successfully
+2026-10-26 09:08:00.0167 - DEBUG - graphrag.api.index - {'entities':                           title  ...                                        description
+0                   API GATEWAY  ...  A component through which Service A calls Serv...
+1                       RETRIES  ...  RETRIES is a resilience pattern and mechanism ...
+2           EXPONENTIAL BACKOFF  ...  Exponential backoff is a resilience pattern us...
+3                        JITTER  ...  A technique used alongside exponential backoff...
+4              CIRCUIT BREAKERS  ...  A mechanism designed to prevent repeated calls...
+5              CIRCUIT BREAKERS  ...  A resilience pattern used to protect services ...
+6                  FAILURE RATE  ...  **FAILURE RATE** is a metric representing the ...
+7                     SERVICE A  ...  A service in a distributed system that calls S...
+8                     SERVICE B  ...  A service in a distributed system that is call...
+9                       NETWORK  ...  Communication medium over which services in a ...
+10                     TIMEOUTS  ...  Enforced limits on the time a request can take...
+11                  RATE LIMITS  ...  Enforced limits on the rate of requests, manag...
+12                  RELIABILITY  ...  A measure of system dependability that can be ...
+13           TRANSIENT FAILURES  ...  Temporary failures during which retries can im...
+14                         LOAD  ...  The operational burden on a system, which can ...
+15                      OUTAGES  ...  System failures that can be amplified by uncon...
+16  SYNCHRONIZED RETRY ATTEMPTS  ...  Simultaneous retry attempts that are reduced b...
+17           FAILING DEPENDENCY  ...  A dependent service or component that is faili...
+18              CIRCUIT BREAKER  ...  A mechanism that temporarily blocks calls and ...
+19                OBSERVABILITY  ...  A practice that helps engineering teams unders...
+20                      METRICS  ...  Quantitative measures providing complementary ...
+21                         LOGS  ...  Recorded events providing complementary eviden...
+22           DISTRIBUTED TRACES  ...  Traces that follow a request across services t...
+23           DISTRIBUTED TRACES  ...  Traces that follow a request across services t...
+24                      LATENCY  ...  Latency is a metric that measures request dura...
+25                      LATENCY  ...                                                  5
+26                   ERROR RATE  ...  Error rate is a metric monitored by engineers ...
+27     SERVICE-LEVEL OBJECTIVES  ...  Objectives that define target reliability for ...
+28            SERVICE DASHBOARD  ...  A dashboard that can combine latency, error ra...
+29                      TRAFFIC  ...  Traffic is a crucial metric that measures the ...
+30          DISTRIBUTED TRACING  ...  A method that follows a request across service...
+31           DISTRIBUTED TRACES  ...  Traces that follow a request across services t...
+32           DISTRIBUTED TRACES  ...  Traces that follow a request across services t...
+33                RATE LIMITING  ...  Controls request volume to prevent a service f...
+34               LOAD BALANCING  ...  Distributes traffic across healthy service ins...
+35             CIRCUIT BREAKERS  ...  A mechanism designed to prevent repeated calls...
+36             CIRCUIT BREAKERS  ...  A resilience pattern used to protect services ...
+37                   MONITORING  ...  Observing latency, error rate, and traffic to ...
+38             SCALING CAPACITY  ...  Scaling capacity refers to the ability to adju...
+39                      LATENCY  ...  Latency is a metric that measures request dura...
+40                      LATENCY  ...                                                  5
+41           DEPENDENCY FAILURE  ...  A type of failure occurring within system depe...
+
+[42 rows x 5 columns], 'relationships':                  source  ...                                        description
+0           API GATEWAY  ...  The API gateway handles request routing where ...
+1               RETRIES  ...  Retries and exponential backoff are configured...
+2               RETRIES  ...  Jitter is used alongside exponential backoff t...
+3      CIRCUIT BREAKERS  ...  Circuit breakers trigger and prevent calls whe...
+4             SERVICE A  ...   Service A calls Service B through an API gateway
+5           API GATEWAY  ...  The API gateway routes requests from Service A...
+6           API GATEWAY  ...      The API gateway enforces timeouts on requests
+7           API GATEWAY  ...   The API gateway enforces rate limits on requests
+8               RETRIES  ...  Retries can improve reliability when transient...
+9               RETRIES  ...     Retries are used when transient failures occur
+10              RETRIES  ...             Uncontrolled retries can increase load
+11              RETRIES  ...           Uncontrolled retries can amplify outages
+12  EXPONENTIAL BACKOFF  ...  Exponential backoff reduces synchronized retry...
+13               JITTER  ...         Jitter reduces synchronized retry attempts
+14     CIRCUIT BREAKERS  ...  Circuit breakers prevent repeated calls to a f...
+15      CIRCUIT BREAKER  ...  The circuit breaker responds by temporarily bl...
+16        OBSERVABILITY  ...  Observability utilizes metrics as complementar...
+17        OBSERVABILITY  ...  Observability utilizes logs as complementary e...
+18        OBSERVABILITY  ...  Observability utilizes distributed traces as c...
+19    SERVICE DASHBOARD  ...  A service dashboard combines latency as a key ...
+20    SERVICE DASHBOARD  ...  A service dashboard combines error rate as a k...
+21    SERVICE DASHBOARD  ...  A service dashboard combines traffic as a key ...
+22  DISTRIBUTED TRACING  ...  Distributed tracing helps identify which depen...
+23        OBSERVABILITY  ...  Observability uses distributed tracing to foll...
+24              RETRIES  ...  Retries and circuit breakers are configured to...
+25  EXPONENTIAL BACKOFF  ...  Exponential backoff and circuit breakers are c...
+26           MONITORING  ...  Monitoring involves tracking latency to detect...
+27           MONITORING  ...  Monitoring involves tracking error rate to det...
+28           MONITORING  ...  Monitoring involves tracking traffic to detect...
+29     SCALING CAPACITY  ...  Scaling capacity may help with sustained load,...
+30     SCALING CAPACITY  ...  Scaling capacity does not fix every source of ...
+
+[31 rows x 5 columns]}
+2026-10-26 09:08:00.0171 - INFO - graphrag.index.workflows.finalize_graph - Workflow started: finalize_graph
+2026-10-26 09:08:00.0265 - INFO - graphrag.index.workflows.finalize_graph - Workflow completed: finalize_graph
+2026-10-26 09:08:00.0266 - INFO - graphrag.api.index - Workflow finalize_graph completed successfully
+2026-10-26 09:08:00.0266 - DEBUG - graphrag.api.index - {'entities': [{'id': '4037ffa4-27fc-4eac-b848-561f9a5c236d', 'human_readable_id': 0, 'title': 'API GATEWAY', 'type': 'SYSTEM_COMPONENT', 'description': 'A component through which Service A calls Service B, responsible for routing requests and enforcing timeouts and rate limits', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'frequency': 1, 'degree': 5}, {'id': 'c43b3790-b716-4e6b-adce-85cde3336e8f', 'human_readable_id': 1, 'title': 'RETRIES', 'type': 'METHOD', 'description': 'RETRIES is a resilience pattern and mechanism utilized to improve system reliability when transient failures occur. By attempting failed requests again, RETRIES helps mitigate temporary disruptions. However, if left uncontrolled, this mechanism can significantly increase traffic and system load, potentially amplifying existing outages for already overloaded dependencies.', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'frequency': 2, 'degree': 8}, {'id': 'b8289355-b828-461a-b02a-1abb2b57e24f', 'human_readable_id': 2, 'title': 'EXPONENTIAL BACKOFF', 'type': 'METHOD', 'description': 'Exponential backoff is a resilience pattern used to space out retry attempts by progressively increasing the wait time between subsequent tries. Additionally, exponential backoff is often used alongside jitter to help reduce synchronized retry attempts across multiple clients, thereby preventing network congestion and server overload.', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'frequency': 2, 'degree': 3}, {'id': '9793de56-2891-4d25-9e13-2692c46477f9', 'human_readable_id': 3, 'title': 'JITTER', 'type': 'METHOD', 'description': 'A technique used alongside exponential backoff to reduce synchronized retry attempts', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'frequency': 1, 'degree': 2}, {'id': 'e631bf31-4687-4e3c-80c0-3b79b95a6463', 'human_readable_id': 4, 'title': 'CIRCUIT BREAKERS', 'type': 'TECHNOLOGY', 'description': 'A mechanism designed to prevent repeated calls to a failing dependency when the failure rate crosses a configured threshold', 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'frequency': 1, 'degree': 4}], 'relationships': [{'id': '60c1ad23-ac72-4c4e-9929-8438013baa1c', 'human_readable_id': 0, 'source': 'API GATEWAY', 'target': 'RETRIES', 'description': 'The API gateway handles request routing where techniques like retries and backoff are applied for reliability', 'weight': 5.0, 'combined_degree': 13, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6']}, {'id': '5cd73cf5-ce78-4b12-bb03-36798efa74ad', 'human_readable_id': 1, 'source': 'RETRIES', 'target': 'EXPONENTIAL BACKOFF', 'description': 'Retries and exponential backoff are configured together as resilience patterns to enhance the reliability of systems. Specifically, exponential backoff is a method applied to retries to reduce synchronized retry attempts.', 'weight': 18.0, 'combined_degree': 11, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c']}, {'id': 'c35afe6c-0dcb-4608-86bb-2057b7435283', 'human_readable_id': 2, 'source': 'RETRIES', 'target': 'JITTER', 'description': 'Jitter is used alongside exponential backoff to optimize retry attempts', 'weight': 9.0, 'combined_degree': 10, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6']}, {'id': '9b1e538b-1184-4f2d-976d-8f8a03fa6ec1', 'human_readable_id': 3, 'source': 'CIRCUIT BREAKERS', 'target': 'FAILURE RATE', 'description': 'Circuit breakers trigger and prevent calls when the failure rate crosses a configured threshold', 'weight': 1.0, 'combined_degree': 6, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6']}, {'id': '805671aa-c71a-4f0d-a9b9-b572443aa730', 'human_readable_id': 4, 'source': 'SERVICE A', 'target': 'API GATEWAY', 'description': 'Service A calls Service B through an API gateway', 'weight': 9.0, 'combined_degree': 6, 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6']}]}
+2026-10-26 09:08:00.0268 - INFO - graphrag.index.workflows.extract_covariates - Workflow started: extract_covariates
+2026-10-26 09:08:00.0268 - INFO - graphrag.index.workflows.extract_covariates - Workflow completed: extract_covariates
+2026-10-26 09:08:00.0268 - INFO - graphrag.api.index - Workflow extract_covariates completed successfully
+2026-10-26 09:08:00.0268 - DEBUG - graphrag.api.index - None
+2026-10-26 09:08:00.0269 - INFO - graphrag.index.workflows.create_communities - Workflow started: create_communities
+2026-10-26 09:08:00.0548 - INFO - graphrag.index.workflows.create_communities - Workflow completed: create_communities
+2026-10-26 09:08:00.0551 - INFO - graphrag.api.index - Workflow create_communities completed successfully
+2026-10-26 09:08:00.0551 - DEBUG - graphrag.api.index - [{'id': '021694a5-70ec-49a1-8032-2bcab7058a2c', 'human_readable_id': 0, 'community': 0, 'level': 0, 'parent': -1, 'children': [], 'title': 'Community 0', 'entity_ids': ['4037ffa4-27fc-4eac-b848-561f9a5c236d', '919fa6ee-9d2e-43d1-9ba4-1c598e7f05d4', 'b2c2aaf4-409c-48da-b4a1-4e2a80f2b402', 'f3b68581-2d5e-4ddb-bbc3-5ad13a5b6c5c', '58660173-3079-4de3-808c-a26402063589'], 'relationship_ids': ['0c530b2c-e65c-4e56-ba30-bf3b911c194a', '403e208b-413a-409d-93d0-c32d11ce07cd', '805671aa-c71a-4f0d-a9b9-b572443aa730', 'b67acbea-d28c-4dd2-8db2-aea0071f3036'], 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'period': '2026-10-26', 'size': 5}, {'id': 'a959ef56-e1b9-48a1-825e-bb99f6f64c31', 'human_readable_id': 1, 'community': 1, 'level': 0, 'parent': -1, 'children': [], 'title': 'Community 1', 'entity_ids': ['c43b3790-b716-4e6b-adce-85cde3336e8f', 'e631bf31-4687-4e3c-80c0-3b79b95a6463', 'b8289355-b828-461a-b02a-1abb2b57e24f', 'c206e255-2822-4ff5-bf95-45963f8aa5eb', '3ce115c8-9137-441b-92fa-3505e11d17d4', '45ced48a-cfc5-4132-94b2-b495000b46ac', '45abd891-bb17-49df-ad7f-b39de97b9cb3', '144164ff-98e9-41e4-8f8b-b682a728c589'], 'relationship_ids': ['01d22c36-b267-4fa5-b580-c6d4dbf52e83', '0ca88c83-3972-4fe6-9645-427136aa483b', '0fe45cd0-34d2-415f-8d9e-46a00790605b', '5cd73cf5-ce78-4b12-bb03-36798efa74ad', '7016305d-7514-4ea3-8b09-7606702d8b75', 'a498c173-f276-492b-9964-75ef7c3204ea', 'c621e466-72cc-44ae-8f16-e2ff719aa344', 'd1d597e5-d1fc-4f94-8eee-8616f9678892'], 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c'], 'period': '2026-10-26', 'size': 8}, {'id': '4406e0f5-1739-47fc-825d-979b6aa00606', 'human_readable_id': 2, 'community': 2, 'level': 0, 'parent': -1, 'children': [], 'title': 'Community 2', 'entity_ids': ['a3c6ae58-9231-41c8-b341-a4249fc9983e', 'c1491485-fafb-40e4-a5c0-dbf94d34608f'], 'relationship_ids': ['2ba088bd-3fb5-47d5-8603-c72f10f53843'], 'text_unit_ids': ['f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0'], 'period': '2026-10-26', 'size': 2}, {'id': '0563bd85-d5cc-4597-90e3-eeee1aaedb3b', 'human_readable_id': 3, 'community': 3, 'level': 0, 'parent': -1, 'children': [], 'title': 'Community 3', 'entity_ids': ['5d8afe3b-d656-4c15-9078-dbef119cbed4', '9793de56-2891-4d25-9e13-2692c46477f9'], 'relationship_ids': ['701a8273-d116-4997-8643-068fe3509e0b'], 'text_unit_ids': ['b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6'], 'period': '2026-10-26', 'size': 2}]
+2026-10-26 09:08:00.0552 - INFO - graphrag.index.workflows.create_final_text_units - Workflow started: create_final_text_units
+2026-10-26 09:08:00.0625 - INFO - graphrag.index.workflows.create_final_text_units - Workflow completed: create_final_text_units
+2026-10-26 09:08:00.0626 - INFO - graphrag.api.index - Workflow create_final_text_units completed successfully
+2026-10-26 09:08:00.0626 - DEBUG - graphrag.api.index - [{'id': 'b0ca2833340d32052483734b1b8da42c68a1c07301275a958e578d6f2c0fd975e493c187c9ff97eccc86068941a056a4823f2ae5c2bf0d4f3c3377d8d1840cc6', 'human_readable_id': 0, 'text': 'Distributed Systems: Service Reliability\n\n    A distributed system consists of services communicating over a network.\n    Service A calls Service B through an API gateway. The API gateway\n    routes requests and can enforce timeouts and rate limits.\n\n    Retries can improve reliability when transient failures occur.\n    However, uncontrolled retries can increase load and amplify outages.\n    Exponential backoff and jitter reduce synchronized retry attempts.\n\n    Circuit breakers prevent repeated calls to a failing dependency.\n    When the failure rate crosses a configured threshold', 'n_tokens': 100, 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'entity_ids': ['4037ffa4-27fc-4eac-b848-561f9a5c236d', 'c43b3790-b716-4e6b-adce-85cde3336e8f', 'b8289355-b828-461a-b02a-1abb2b57e24f', '9793de56-2891-4d25-9e13-2692c46477f9', 'e631bf31-4687-4e3c-80c0-3b79b95a6463', 'c1491485-fafb-40e4-a5c0-dbf94d34608f', 'b2c2aaf4-409c-48da-b4a1-4e2a80f2b402', 'f3b68581-2d5e-4ddb-bbc3-5ad13a5b6c5c', '6a6853c9-9b2b-4a9f-b634-5bb7f27138cf', '58660173-3079-4de3-808c-a26402063589', '919fa6ee-9d2e-43d1-9ba4-1c598e7f05d4', '45abd891-bb17-49df-ad7f-b39de97b9cb3', '144164ff-98e9-41e4-8f8b-b682a728c589', '3ce115c8-9137-441b-92fa-3505e11d17d4', '45ced48a-cfc5-4132-94b2-b495000b46ac', '5d8afe3b-d656-4c15-9078-dbef119cbed4', 'c206e255-2822-4ff5-bf95-45963f8aa5eb'], 'relationship_ids': ['60c1ad23-ac72-4c4e-9929-8438013baa1c', '5cd73cf5-ce78-4b12-bb03-36798efa74ad', 'c35afe6c-0dcb-4608-86bb-2057b7435283', '9b1e538b-1184-4f2d-976d-8f8a03fa6ec1', '805671aa-c71a-4f0d-a9b9-b572443aa730', 'b67acbea-d28c-4dd2-8db2-aea0071f3036', '0c530b2c-e65c-4e56-ba30-bf3b911c194a', '403e208b-413a-409d-93d0-c32d11ce07cd', 'c621e466-72cc-44ae-8f16-e2ff719aa344', '7016305d-7514-4ea3-8b09-7606702d8b75', '01d22c36-b267-4fa5-b580-c6d4dbf52e83', '0ca88c83-3972-4fe6-9645-427136aa483b', '9ed14033-219d-4db6-b81b-e55c30b8b45d', '701a8273-d116-4997-8643-068fe3509e0b', 'd1d597e5-d1fc-4f94-8eee-8616f9678892'], 'covariate_ids': []}, {'id': 'f3b271ceb34641ec5cf88318800a17bf3362564ce454940baa913c56c034c4b15b9bdbcc32018add04918d4d878dececd0f0216c2d2e7a70b5a58088546b63f0', 'human_readable_id': 1, 'text': '.\n    When the failure rate crosses a configured threshold, the circuit\n    breaker temporarily blocks calls and allows recovery.', 'n_tokens': 23, 'document_id': 'b9c6f611addc84d60357c829e042254e47efbb01ea0825b99b0042d291db2339ea14650a903d05fc44a9f7e5bfc01460885d02298dbb5e34ecb6abbafe35d745', 'entity_ids': ['c1491485-fafb-40e4-a5c0-dbf94d34608f', 'a3c6ae58-9231-41c8-b341-a4249fc9983e'], 'relationship_ids': ['2ba088bd-3fb5-47d5-8603-c72f10f53843'], 'covariate_ids': []}, {'id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'human_readable_id': 2, 'text': 'Distributed Systems: Observability\n\n    Observability helps engineering teams understand system behavior.\n    Metrics, logs, and distributed traces provide complementary evidence.\n\n    Latency measures request duration, while error rate measures the\n    proportion of failed requests. Service-level objectives define\n    target reliability for a service over a measurement window.\n\n    A service dashboard can combine latency, error rate, and traffic.\n    Distributed tracing follows a request across services and helps\n    identify which dependency contributes to elevated latency.', 'n_tokens': 97, 'document_id': 'e0290ec1bd64a0f274583511d99c96326f49438a7d0593bb5adecc8f532d12f02fda092104f54e718fa9a12f90182f9826c40d2a1af0d8f5feecdb6e89f311d8', 'entity_ids': ['d84d4248-fe59-48c1-ac75-701358ab8bea', '3e70cacf-ba77-4daa-ab5e-8cc67c014a06', 'd1aeb526-2a6e-4ddf-a5e0-09f7ae9c7843', 'b9d56048-3ba1-40f5-8885-6a218fd2230d', '838e7227-0b53-4789-bea5-6b6ed3561667', 'dc7c0e16-274e-4eb2-8bf8-25ce96e22a92', 'bc6b28e6-0017-4dff-b05b-84d010c92e72', '4446e13a-27e6-4911-ac70-73d1621d289e', '4d827e44-2cfa-4527-bbb8-f0d5820eea46', '4d827e44-2cfa-4527-bbb8-f0d5820eea46', '2817930e-bf03-4351-ad89-33b131b649f1'], 'relationship_ids': ['8ee4ddb0-9476-4721-9956-f38907b01b96', '8bbd8dd2-26bc-4d52-a8ef-414121027b0d', '8342da08-888d-40f8-ad56-aa716a964845', 'd709e408-ebd4-4454-bf93-d493e9b4e149', 'd1885749-b0df-4a6c-bcbb-cdf3b54397d5', '06ce100e-2d1a-401e-807b-087665e3d4a1', '274c8e84-4115-4b26-9020-54ac4d0e87e1', 'dc623a31-2bee-4db1-ae55-454d95abe57e'], 'covariate_ids': []}, {'id': 'ef75e67bdfe9901dc928e64a03606b1720a71a57c77a80cd9d7b2b6c36f703e7ce4663519ca697ab2b1a56aa9382cc7475738ca88ef06860df7b6c402d82a89c', 'human_readable_id': 3, 'text': 'Distributed Systems: Resilience and Scaling\n\n    A service can become overloaded when incoming traffic exceeds capacity.\n    Rate limiting controls request volume, while load balancing distributes\n    traffic across healthy service instances.\n\n    Retries, exponential backoff, and circuit breakers are resilience\n    patterns. They should be configured together because retries can\n    increase traffic to an already overloaded dependency.\n\n    Monitoring latency, error rate, and traffic helps engineers detect\n    degradation. Scaling capacity may help with sustained load, but it', 'n_tokens': 100, 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'entity_ids': ['c43b3790-b716-4e6b-adce-85cde3336e8f', 'b8289355-b828-461a-b02a-1abb2b57e24f', '838e7227-0b53-4789-bea5-6b6ed3561667', 'dc7c0e16-274e-4eb2-8bf8-25ce96e22a92', '4d827e44-2cfa-4527-bbb8-f0d5820eea46', 'c3f81b1d-5483-44eb-a02d-3e464623fdd6', '0b177a66-6248-4b22-804e-0c5f1e4f5d41', 'b41aed56-de2d-4c41-b999-dde9412c8216', '119cfb32-4d7d-46f8-9ac5-c221fcf972f3'], 'relationship_ids': ['5cd73cf5-ce78-4b12-bb03-36798efa74ad', '0fe45cd0-34d2-415f-8d9e-46a00790605b', 'a498c173-f276-492b-9964-75ef7c3204ea', '1ad46b17-5ff4-4680-8346-dde475aa64d7', 'a26470b0-2302-40a7-8948-7ca8159c020b', '98c69f03-9430-4885-af8c-703c4fce85b5'], 'covariate_ids': []}, {'id': 'f5c16f640b889b7a105cfec4770078f83371d21b92177253746e363a029c6e28d9d9924f4af997cea3d002c471a9bad04936774e63dfcb3715bf3f67696c0e90', 'human_readable_id': 4, 'text': ' Scaling capacity may help with sustained load, but it\n    does not fix every source of latency or dependency failure.', 'n_tokens': 23, 'document_id': '0a2ba140a34c27e2df00d56671272e108252f32cd0a4365c479bf4b339ce6182dc2e74434edef048c7db04213cb51998ab270f26780aed8166c388fc2acbfb34', 'entity_ids': ['119cfb32-4d7d-46f8-9ac5-c221fcf972f3', '00a70361-4b53-495d-937b-f44b033d6ff7'], 'relationship_ids': ['b7a099b7-dc75-405f-9823-344b138afb46', 'b71a277c-0a41-4064-9878-620e5770afe1'], 'covariate_ids': []}]
+2026-10-26 09:08:00.0628 - INFO - graphrag.index.workflows.create_community_reports - Workflow started: create_community_reports
+2026-10-26 09:08:00.0750 - INFO - graphrag.index.operations.summarize_communities.graph_context.context_builder - Number of nodes at level=0 => 17
+2026-10-26 09:08:12.0505 - INFO - graphrag.logger.progress - level 0 summarize communities progress: 1/4
+2026-10-26 09:08:12.0507 - INFO - graphrag.logger.progress - level 0 summarize communities progress: 2/4
+2026-10-26 09:08:12.0508 - INFO - graphrag.logger.progress - level 0 summarize communities progress: 3/4
+2026-10-26 09:08:12.0510 - INFO - graphrag.logger.progress - level 0 summarize communities progress: 4/4
+2026-10-26 09:08:12.0547 - INFO - graphrag.index.workflows.create_community_reports - Workflow completed: create_community_reports
+2026-10-26 09:08:12.0646 - INFO - graphrag.api.index - Workflow create_community_reports completed successfully
+2026-10-26 09:08:12.0649 - DEBUG - graphrag.api.index -                                                   id  ...  size
+0  73bcb5f91f2b15706741ce79d77bc1e21aabc988475e6d...  ...     5
+1  3b6d34f3cf8de6bb7da1e43d3e1756d207d8fcfb51a1e4...  ...     8
+2  ae5e859163480a86ed65082d87641836ffbc8fc7f17161...  ...     2
+3  4d27fed17117e621a288120593f511024a987f517030c9...  ...     2
+
+[4 rows x 15 columns]
+2026-10-26 09:08:12.0650 - INFO - graphrag.index.workflows.generate_text_embeddings - Workflow started: generate_text_embeddings
+2026-10-26 09:08:12.0670 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedding the following fields: ['entity_description', 'community_full_content', 'text_unit_text']
+2026-10-26 09:08:19.0045 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 33 inputs via 33 snippets using 3 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:08:19.0290 - INFO - graphrag.logger.progress - generate embeddings progress: 1/3
+2026-10-26 09:08:19.0893 - INFO - graphrag.logger.progress - generate embeddings progress: 2/3
+2026-10-26 09:08:19.0899 - INFO - graphrag.logger.progress - generate embeddings progress: 3/3
+2026-10-26 09:08:20.0012 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 33 rows for entity_description
+2026-10-26 09:08:20.0050 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 4 inputs via 4 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:08:20.0432 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:08:20.0453 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 4 rows for community_full_content
+2026-10-26 09:08:20.0485 - INFO - graphrag.index.operations.embed_text.run_embed_text - embedding 5 inputs via 5 snippets using 1 batches. max_batch_size=16, batch_max_tokens=8191
+2026-10-26 09:08:20.0558 - INFO - graphrag.logger.progress - generate embeddings progress: 1/1
+2026-10-26 09:08:20.0583 - INFO - graphrag.index.workflows.generate_text_embeddings - Embedded 5 rows for text_unit_text
+2026-10-26 09:08:20.0583 - INFO - graphrag.index.workflows.generate_text_embeddings - Workflow completed: generate_text_embeddings
+2026-10-26 09:08:20.0638 - INFO - graphrag.api.index - Workflow generate_text_embeddings completed successfully
+2026-10-26 09:08:20.0639 - DEBUG - graphrag.api.index - None
+2026-10-26 09:08:20.0641 - INFO - graphrag.index.run.run_pipeline - Indexing pipeline complete.
+2026-10-26 09:08:20.0643 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-embedding-001: {
+  "attempted_request_count": 6,
+  "successful_response_count": 6,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 0,
+  "retries": 0,
+  "retry_rate": 0.0,
+  "compute_duration_seconds": 1.7097833156585693,
+  "compute_duration_per_response_seconds": 0.2849638859430949,
+  "cached_responses": 1,
+  "cache_hit_rate": 0.16666666666666666,
+  "streaming_responses": 0,
+  "responses_with_tokens": 6,
+  "prompt_tokens": 2371,
+  "total_tokens": 2371,
+  "tokens_per_response": 395.1666666666667,
+  "responses_with_cost": 6,
+  "input_cost": 0.00035565,
+  "total_cost": 0.00035565,
+  "cost_per_response": 5.9275e-05
+}
+2026-10-26 09:08:20.0644 - INFO - graphrag_llm.metrics.log_metrics_writer - Metrics for gemini/gemini-3.5-flash-lite: {
+  "attempted_request_count": 23,
+  "successful_response_count": 23,
+  "failed_response_count": 0,
+  "failure_rate": 0.0,
+  "requests_with_retries": 1,
+  "retries": 4,
+  "retry_rate": 0.14814814814814814,
+  "compute_duration_seconds": 60.89131212234497,
+  "compute_duration_per_response_seconds": 2.6474483531454336,
+  "cache_hit_rate": 0.0,
+  "streaming_responses": 0,
+  "responses_with_tokens": 23,
+  "prompt_tokens": 30609,
+  "completion_tokens": 4720,
+  "total_tokens": 35329,
+  "tokens_per_response": 1536.0434782608695,
+  "responses_with_cost": 23,
+  "input_cost": 0.009182699999999999,
+  "output_cost": 0.011800000000000001,
+  "total_cost": 0.0209827,
+  "cost_per_response": 0.0009122913043478261
+}
