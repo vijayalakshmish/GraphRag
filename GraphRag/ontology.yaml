@@ -1,0 +1,109 @@
+ontology_name: Distributed Systems Engineering Ontology
+version: 1.0.0
+purpose: Represent system components, resilience patterns, observability signals, metrics, and reliability
+  targets.
+entity_classes:
+  SYSTEM_COMPONENT:
+    description: A service or architectural component.
+    examples:
+    - API GATEWAY
+    - DEPENDENCY FAILURE
+  RESILIENCE_PATTERN:
+    description: A technique used to improve system resilience.
+    examples:
+    - RETRIES
+    - EXPONENTIAL BACKOFF
+    - CIRCUIT BREAKERS
+    - RATE LIMITING
+  OBSERVABILITY_SIGNAL:
+    description: A telemetry source used to understand system behavior.
+    examples:
+    - METRICS
+    - LOGS
+    - DISTRIBUTED TRACES
+  METRIC:
+    description: A measurable indicator of system behavior.
+    examples:
+    - LATENCY
+    - ERROR RATE
+    - TRAFFIC
+  RELIABILITY_TARGET:
+    description: A defined reliability goal for a service.
+    examples:
+    - SERVICE-LEVEL OBJECTIVES
+  ENGINEERING_CONCEPT:
+    description: An engineering concept that does not fit another class.
+    examples:
+    - OBSERVABILITY
+  METHOD:
+    description: An operational method or technique.
+    examples:
+    - SCALING CAPACITY
+    - LOAD BALANCING
+  TECHNOLOGY:
+    description: A named technology or implementation technology.
+    examples: []
+  STANDARD:
+    description: A named technical standard or specification.
+    examples: []
+  DATA:
+    description: A data object or data category.
+    examples: []
+  ORGANIZATION:
+    description: An organization referenced in the source material.
+    examples: []
+relationship_types:
+  DEPENDS_ON:
+    description: A component relies on another component.
+    domain:
+    - SYSTEM_COMPONENT
+    range:
+    - SYSTEM_COMPONENT
+  MITIGATES:
+    description: A technique reduces a failure risk or adverse condition.
+    domain:
+    - RESILIENCE_PATTERN
+    - METHOD
+    range:
+    - SYSTEM_COMPONENT
+    - ENGINEERING_CONCEPT
+    - METRIC
+  MONITORS:
+    description: A telemetry mechanism observes a signal or component.
+    domain:
+    - OBSERVABILITY_SIGNAL
+    range:
+    - SYSTEM_COMPONENT
+    - METRIC
+  MEASURES:
+    description: A metric measures a property of a system or service.
+    domain:
+    - METRIC
+    range:
+    - SYSTEM_COMPONENT
+    - ENGINEERING_CONCEPT
+  IDENTIFIES:
+    description: A diagnostic signal helps locate a problem or dependency.
+    domain:
+    - OBSERVABILITY_SIGNAL
+    - METRIC
+    range:
+    - SYSTEM_COMPONENT
+    - ENGINEERING_CONCEPT
+  SUPPORTS:
+    description: One concept contributes to or supports another.
+    domain:
+    - RESILIENCE_PATTERN
+    - OBSERVABILITY_SIGNAL
+    - METRIC
+    - METHOD
+    range:
+    - ENGINEERING_CONCEPT
+    - RELIABILITY_TARGET
+    - SYSTEM_COMPONENT
+validation_rules:
+  entity_type_must_be_declared: true
+  relationship_type_must_be_declared: true
+  relationship_domain_and_range_must_match: true
+  entity_names_must_not_be_empty: true
+  unknown_types: Report for review; do not silently remap.

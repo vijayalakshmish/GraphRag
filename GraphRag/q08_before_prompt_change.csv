@@ -1,0 +1,2 @@
+test_id,test_type,result,latency_seconds,notes
+Q08,Answerable,Partial,16.93,"Correctly identifies latency, error rate, and traffic volume. Does not explain the expected roles of metrics, logs, and distributed traces; includes substantial off-focus detail about resilience patterns. Source material contains the omitted observability facts."

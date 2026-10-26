@@ -1,0 +1,11 @@
+entity_types:
+- system_component
+- resilience_pattern
+- observability_signal
+- metric
+- reliability_target
+- engineering_concept
+- method
+- technology
+max_gleanings: 1
+prompt_path: prompts/extract_graph_ontology_proposed.txt

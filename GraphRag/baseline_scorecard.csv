@@ -1,0 +1,6 @@
+test_id,test_type,result,latency_seconds,notes
+Q1,Answerable,Pass,28.49,Backoff and jitter explanation supported by source text
+Q2,Answerable,Pass,20.35,Distinguished rate limiting from circuit breakers
+Q3,Answerable,Pass,17.75,Explained tracing and monitoring metrics
+Q4,Unsupported,Pass,,Correctly declined to invent production costs
+Q5,Unsupported,Pass,17.39,Correctly declined to invent database details

@@ -1,0 +1,11 @@
+id,question,answerable,expected_evidence,type
+Q01,How do retries improve service reliability?,yes,Retries; transient failures,single_concept
+Q02,How do exponential backoff and jitter reduce synchronized retries?,yes,Exponential backoff; jitter; synchronized retry attempts,multi_concept
+Q03,When should a circuit breaker temporarily block calls?,yes,Circuit breakers; configured threshold; failing dependency,single_concept
+Q04,"What are the roles of metrics, logs, and distributed traces?",yes,Observability; metrics; logs; distributed traces,multi_concept
+Q05,Which service indicators are useful for monitoring?,yes,Latency; error rate; traffic,multi_concept
+Q06,What do service-level objectives define?,yes,Target reliability; measurement window,single_concept
+Q07,How can rate limiting and load balancing help during overload?,yes,Overload; rate limiting; load balancing,multi_concept
+Q08,How can retries and circuit breakers work together to reduce cascading failures?,yes,Retries; circuit breakers; failing dependency; reliability,multi_concept
+Q09,What was Service A's exact monthly cloud bill?,no,monthly cloud bill; exact cloud bill,unanswerable
+Q10,What was the exact p99 latency of Service B last Tuesday?,no,p99 latency; last Tuesday; dated p99 measurement,unanswerable
