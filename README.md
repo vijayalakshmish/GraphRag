@@ -1,343 +1,161 @@
-GraphRAG Research Intelligence
+# 🕸️ GraphRAG Research Intelligence
 
-Graph-Enhanced Retrieval-Augmented Generation for Technical Research and Engineering Knowledge
+A small, learning-focused prototype of **GraphRAG** (graph-based retrieval-augmented generation) built with Microsoft's open-source [GraphRAG](https://github.com/microsoft/graphrag) framework and the **Gemini API**. It turns a few technical documents into a knowledge graph, groups related entities into communities, and answers questions with citations back to the source text. An ontology file describes the kinds of things the graph should contain, and the extracted graph is checked against it.
 
-<p align="center">
-  <strong>Turning fragmented engineering documents into connected, evidence-grounded answers.</strong>
-</p><p align="center">
-  <a href="https://github.com/vijayalakshmish/GraphRag">GitHub Repository</a> ·
-  <a href="https://github.com/vijayalakshmish/GraphRag/blob/main/Graphrag.ipynb">Open Notebook</a> ·
-  <a href="https://microsoft.github.io/graphrag/">GraphRAG Documentation</a>
-</p>---
-
-Overview
-
-GraphRAG Research Intelligence is a research-oriented question-answering application that combines knowledge-graph-based retrieval with large language models to explore technical engineering documents.
-
-Traditional retrieval-augmented generation (RAG) systems often retrieve semantically similar text passages. However, engineering questions can require connecting multiple concepts, dependencies, failure conditions, and mitigation strategies spread across different documents.
-
-This project explores how graph-structured knowledge and evidence-based retrieval can help an LLM connect related technical information and generate more contextually informed answers.
-
-The application uses Microsoft's GraphRAG framework to build structured representations of a document collection, Google Gemini for language generation and embeddings, LanceDB for vector storage, and Gradio for an interactive question-answering interface.
-
-The current implementation is a working prototype evaluated on a small synthetic corpus focused on distributed systems, service reliability, resilience patterns, and observability.
-
-Why this project?
-
-Engineering knowledge is rarely isolated in a single paragraph. Understanding a system often requires connecting concepts such as:
-
-- Service dependencies and cascading failures
-- Circuit breakers, retries, exponential backoff, and jitter
-- Latency, error rates, and service-level objectives
-- Observability signals and dependency-level diagnosis
-- Capacity planning, load balancing, and rate limiting
-
-A retrieval system that only finds similar passages may not always connect these concepts into a coherent explanation.
-
-This project investigates a graph-enhanced approach in which documents are transformed into text units, entities, relationships, and community-level summaries. At query time, retrieved graph context and source passages are supplied to an LLM to help produce a grounded answer.
-
-Project objectives
-
-- Build a complete document-indexing and question-answering workflow.
-- Explore knowledge graphs as a complement to vector-based retrieval.
-- Use graph relationships to provide additional context for technical questions.
-- Generate answers with source references that help users inspect supporting evidence.
-- Expose the workflow through a lightweight interactive web interface.
-- Establish a foundation for systematic retrieval evaluation and future improvements.
-
-Key features
-
-Feature| Description
-Graph-enhanced retrieval| Uses GraphRAG's structured representation of technical documents.
-Knowledge extraction| Builds entity and relationship artifacts from the input corpus.
-Community-aware indexing| Produces graph communities and community reports as part of the indexing workflow.
-Gemini integration| Uses Gemini for answer generation and embedding generation.
-Vector storage| Uses LanceDB through the configured vector-store integration.
-Interactive interface| Provides a Gradio application for submitting research questions.
-Evidence display| Displays retrieved source passages alongside generated answers.
-Query diagnostics| Includes a diagnostics panel intended to expose query and retrieval information.
-Notebook-based workflow| Supports experimentation in Google Colab without requiring a dedicated local server setup.
-
-«Implementation note: The current prototype demonstrates local GraphRAG retrieval and answer generation. It is not yet a production-grade research platform, and the diagnostics interface and broader evaluation workflow remain areas for improvement.»
-
-System architecture
-
-The application has two main phases: offline indexing and online question answering.
-
-1. Indexing pipeline
-
-Input documents are transformed into structured artifacts that can support retrieval.
-
-1. Document ingestion — load the technical text corpus.
-2. Text-unit creation — split the documents into smaller units for analysis and evidence retrieval.
-3. Entity extraction — identify relevant technical concepts and entities.
-4. Relationship extraction — represent connections among the extracted entities.
-5. Community processing — organize the graph into communities and generate community reports.
-6. Embedding and vector storage — create embeddings and persist vector data using the configured LanceDB integration.
-7. Artifact persistence — save indexing outputs for use during queries.
-
-2. Query pipeline
-
-When a user submits a question:
-
-1. The Gradio interface receives the question.
-2. The GraphRAG Local Search engine retrieves relevant graph context and text evidence.
-3. Retrieved information is assembled into the context supplied to the language model.
-4. Gemini generates a natural-language answer.
-5. The interface displays the answer, retrieved source context, and query diagnostics.
-
-Architecture diagram
-
-flowchart TD
-    A[Technical Engineering Documents] --> B[Document Ingestion]
-    B --> C[Text Unit Creation]
-    C --> D[Entity and Relationship Extraction]
-    D --> E[Knowledge Graph]
-    E --> F[Community Detection and Reports]
-    C --> G[Text Embeddings]
-    G --> H[LanceDB Vector Store]
-    E --> I[GraphRAG Index Artifacts]
-    F --> I
-
-    J[User Question] --> K[Gradio Interface]
-    K --> L[GraphRAG Local Search]
-    I --> L
-    H --> L
-    L --> M[Retrieved Context]
-    M --> N[Gemini Language Model]
-    N --> O[Generated Answer]
-    O --> P[Answer and Evidence Display]
-
-The diagram represents the conceptual workflow. Exact retrieval internals and artifact usage are determined by the configured GraphRAG version and query engine.
-
-Technology stack
-
-Technology| Role
-Python| Application and pipeline implementation
-Microsoft GraphRAG| Graph-based indexing and Local Search
-Google Gemini| LLM-based answer generation
-Gemini Embeddings| Semantic representation of text
-LiteLLM integration| Model-provider abstraction used by the configured setup
-LanceDB| Vector storage
-Pandas and Parquet| Structured index-artifact storage and inspection
-Gradio| Interactive question-answering interface
-Google Colab| Notebook-based development and experimentation
-
-Why combine a graph and embeddings?
-
-Embeddings help retrieve text that is semantically related to a query. A knowledge graph represents entities and their relationships explicitly.
-
-Together, these representations can provide complementary context: vector retrieval helps locate relevant material, while graph structures help organize connected concepts and relationships. The benefit depends on the corpus, indexing quality, query strategy, and evaluation results; it should not be assumed for every question.
-
-Current corpus
-
-The prototype uses three small synthetic text documents covering distributed-systems concepts.
-
-Document| Primary subject
-"document_01.txt"| Service reliability and distributed-system dependencies
-"document_02.txt"| Resilience patterns, scaling, and overload protection
-"document_03.txt"| Observability, metrics, logs, and distributed tracing
-
-The corpus supports controlled experimentation with concepts such as circuit breakers, retries, failure rates, service dependencies, load balancing, and observability.
-
-Important: These are synthetic demonstration documents, not a comprehensive collection of real-world engineering research papers. The current results establish functional feasibility, not general performance across large or domain-diverse research collections.
-
-Example interaction
-
-Example question
-
-«How do circuit breakers improve reliability?»
-
-Example answer summary
-
-Circuit breakers monitor failure conditions and temporarily block calls to a failing dependency when a configured threshold is crossed. This helps prevent repeated requests from increasing the load on an unhealthy service and gives the dependency time to recover.
-
-The answer can also connect circuit breakers with complementary resilience practices, such as retries, exponential backoff, jitter, rate limiting, and observability.
-
-Evidence shown in the interface
-
-- Retrieved text passages relevant to the question
-- References to source passages and graph context in the generated answer
-- Query diagnostics, where available
-
-The answer is generated from the current indexed corpus and configuration. The example illustrates the intended interaction, not a guarantee that every response will be complete or correct.
-
-Evaluation and testing
-
-Evaluation is important because a fluent answer is not necessarily a correct or adequately grounded answer.
-
-The current prototype has undergone preliminary functional and retrieval checks on its small synthetic corpus.
-
-Evaluation area| Preliminary result
-Indexing| GraphRAG index artifacts were generated successfully.
-Local Search| A direct Local Search query successfully returned an answer and supporting source passages.
-Interactive application| The Gradio interface successfully displayed generated answers and retrieved source context.
-Small question benchmark| An earlier eight-question check recorded 6 Pass and 2 Partial results.
-Exact-phrase grounding checks| An earlier set of five checks passed all 5.
-
-These results are preliminary and specific to the test corpus and checks performed. They are not an independent benchmark, and they do not establish superiority over standard vector RAG.
-
-Current evaluation limitations
-
-- The corpus is very small and synthetic.
-- The benchmark is limited in size and has not been independently validated.
-- Some questions may rely on overlapping source evidence.
-- Retrieval quality, answer correctness, completeness, and citation accuracy require separate evaluation.
-- Production-level latency, throughput, concurrency, and cost have not been established.
-- Unsupported-question handling needs further systematic testing.
-
-Repository structure
-
-GraphRag/
-├── Graphrag.ipynb    # Main Google Colab notebook
-└── README.md         # Project documentation
-
-This is the expected high-level repository structure. Generated index artifacts, configuration files, and sample documents may be created or maintained inside the notebook environment rather than committed to the repository.
-
-Getting started
-
-Prerequisites
-
-- A Google account with access to Google Colab
-- Access to this GitHub repository
-- A Google Gemini API key
-- An internet connection for package installation and model requests
-- Basic familiarity with Python and retrieval-augmented generation
-
-1. Open the notebook
-
-Open the main notebook in Google Colab:
-
-"Open "Graphrag.ipynb"" (https://colab.research.google.com/github/vijayalakshmish/GraphRag/blob/main/Graphrag.ipynb)
-
-Alternatively, clone or download the repository and upload the notebook to Colab.
-
-2. Configure the API key securely
-
-Create or obtain a Gemini API key through "Google AI Studio" (https://aistudio.google.com/).
-
-Store the key in Colab Secrets or an environment variable named "GEMINI_API_KEY". Grant the notebook access to the secret when prompted.
-
-Never commit API keys, access tokens, private documents, or other secrets to GitHub. If a real API key has previously been exposed in notebook output or source code, revoke it and create a replacement.
-
-3. Run the notebook
-
-Run the notebook cells in their intended order.
-
-The workflow should:
-
-1. Install or import the required dependencies.
-2. Load the GraphRAG configuration.
-3. Configure Gemini generation and embedding providers.
-4. Load the sample documents.
-5. Generate or load the GraphRAG index artifacts.
-6. Initialize the Local Search engine.
-7. Create the Gradio interface.
-8. Launch the application and submit a test question.
-
-The notebook is the primary source of truth for the exact package versions, configuration schema, and execution commands used by this project.
-
-4. Ask a question
-
-Once the interface launches, enter a question related to the indexed documents, for example:
-
-- How do circuit breakers improve reliability?
-- Why can uncontrolled retries worsen an outage?
-- How do metrics, logs, and traces complement one another?
-- How can rate limiting and load balancing help with overload?
-
-The application should return a generated answer and the retrieved source context.
-
-5. Reuse an existing index
-
-When working in the same Colab session, reuse the existing index when appropriate. Re-index only when the input documents, indexing configuration, or required artifacts change.
-
-Indexing can trigger multiple model calls and incur API costs. Start with a small corpus and review the configured model providers before processing a larger collection.
-
-Configuration
-
-The development setup has used the following configuration choices:
-
-Setting| Configured approach
-Indexing framework| Microsoft GraphRAG
-Query mode| Local Search
-Generation provider| Google Gemini
-Embedding provider| Google Gemini
-Vector store| LanceDB
-Input format| Text documents
-Development environment| Google Colab
-User interface| Gradio
-
-The exact model identifiers, chunk sizes, overlap, storage paths, and package versions should be taken from the current notebook and configuration files. They can change as the project evolves.
-
-Security and responsible use
-
-- Keep API credentials outside version control.
-- Do not upload confidential engineering documents to an external model provider without appropriate authorization.
-- Review the provider's data handling, retention, and usage policies before using sensitive information.
-- Treat generated answers as assisted analysis, not as authoritative operational instructions.
-- Verify important claims against the underlying source documents.
-- Avoid presenting preliminary evaluation results as proof of production readiness.
-
-Limitations
-
-This project is a research and portfolio prototype. Current limitations include:
-
-1. Corpus size: only three synthetic documents are used in the initial demonstration.
-2. Domain coverage: the corpus focuses on selected distributed-systems topics.
-3. Evaluation scale: the initial benchmark is too small to support broad performance claims.
-4. Evidence quality: retrieved passages and generated references require further automated validation.
-5. Interface diagnostics: the diagnostics display and error handling need additional refinement.
-6. Operational readiness: authentication, deployment hardening, monitoring, concurrency testing, and production data governance have not been established as complete features.
-
-Roadmap
-
-Potential next steps include:
-
-- [ ] Add a larger, carefully curated technical-document corpus.
-- [ ] Support additional document formats, such as PDF and Markdown.
-- [ ] Add a repeatable benchmark with documented questions, expected evidence, and scoring criteria.
-- [ ] Compare graph-enhanced retrieval against a standard vector-RAG baseline.
-- [ ] Measure retrieval relevance, groundedness, answer completeness, latency, and token usage.
-- [ ] Improve source navigation and citation validation.
-- [ ] Refine diagnostics and user-facing error messages.
-- [ ] Add configurable retrieval and generation settings.
-- [ ] Add automated tests and reproducible environment specifications.
-- [ ] Evaluate deployment, authentication, and monitoring requirements before production use.
-
-Learning outcomes
-
-This project provides practical experience with:
-
-- Graph-based retrieval-augmented generation
-- LLM-powered entity and relationship extraction
-- Knowledge-graph indexing and community reports
-- Embedding generation and vector storage
-- Evidence-aware question answering
-- Model-provider configuration
-- Interactive AI application development
-- Preliminary retrieval evaluation and error analysis
-
-References
-
-- "Microsoft GraphRAG — Official Repository" (https://github.com/microsoft/graphrag)
-- "Microsoft GraphRAG — Documentation" (https://microsoft.github.io/graphrag/)
-- "Google AI Studio" (https://aistudio.google.com/)
-- "LanceDB Documentation" (https://docs.lancedb.com/)
-- "Gradio Documentation" (https://www.gradio.app/docs)
-
-Author
-
-Vijayalakshmi Hitnalli
-
-MCA — Data Science | AI/ML | NLP | Retrieval-Augmented Generation
-
-- GitHub: "@vijayalakshmish" (https://github.com/vijayalakshmish)
-- LinkedIn: "Vijayalakshmi Hitnalli" (https://linkedin.com/in/vijayalakshmi-hitnalli)
-- Portfolio: "Personal Portfolio" (https://vijayalakshmish.github.io/Personal_Portfolio/)
+> **Status:** prototype on a very small corpus. See [Limitations](#limitations) before drawing conclusions from the results.
 
 ---
 
-<p align="center">
-  <em>Exploring how structured knowledge and language models can work together to make technical information easier to retrieve, connect, and understand.</em>
-</p>
+## What it does
+
+```
+documents ──▶ text chunks ──▶ entities + relationships (LLM extraction)
+                                      │
+                                      ▼
+                        knowledge graph ──▶ communities ──▶ community reports
+                                      │
+question ──▶ local search (entities, relationships, source passages) ──▶ answer with [Data: ...] citations
+```
+
+1. **Index:** GraphRAG splits the documents into chunks, asks the model to extract entities and relationships, builds a graph, finds communities, and writes a report for each.
+2. **Query:** local search finds the entities related to a question, collects their relationships and source passages, and has the model answer from that context only.
+3. **Inspect:** the output tables (entities, relationships, communities, reports, text units) can be read directly, so every answer can be traced to its evidence.
+4. **Check against an ontology:** `ontology.yaml` declares classes, relationship types and validation rules. The extracted entity types are audited against it.
+
+## Why a graph?
+
+Plain RAG retrieves passages that look similar to the question. A knowledge graph also stores **how things connect**, so the system can follow relationships and summarize groups of related concepts. This project is a way to study that idea and its costs (extra indexing calls, latency). It does **not** yet include a plain-RAG baseline, so it does not show that the graph approach is better.
+
+---
+
+## Results so far
+
+Index of the three-document experiment (`standard_experiment/`):
+
+| Item | Count |
+|---|---|
+| Entities | 29 |
+| Relationships | 26 |
+| Communities | 5 |
+| Community reports | 5 |
+| Text units (chunks) | 5 |
+
+Hand-graded benchmark (8 questions, 5 answerable and 3 unsupported):
+
+| Result | Count |
+|---|---|
+| Pass | 6 |
+| Partial | 2 |
+| Fail | 0 |
+
+Unsupported questions (for example, a cloud bill or a private phone number that the documents do not contain) were answered with "I do not know" instead of an invented answer. Average query time was about 13 seconds across 7 recorded queries. A second set of 5 evaluation cases is recorded in `EVALUATION_RESULTS.md`.
+
+Entity types found: resilience pattern, system component, metric, engineering concept, observability signal, method, reliability target.
+
+Grading was done by hand against key facts in the source text, so treat the scores as indicative.
+
+---
+
+## Project structure
+
+| Path | Purpose |
+|---|---|
+| `Graphrag.ipynb` | The Colab notebook that built and tested everything |
+| `input/` | The three source documents (`document_01.txt` to `document_03.txt`) |
+| `settings.yaml` | GraphRAG configuration (models, chunking, storage). Reads the key from an environment variable. |
+| `prompts/` | Extraction, community-report and search prompts |
+| `ontology.yaml` | Ontology: 11 classes, 6 relationship types, 5 validation rules |
+| `standard_experiment/` | Isolated run with its own input, output, logs, cache and vector store |
+| `evaluation_questions.csv` | Benchmark questions with expected behaviour (answer or abstain) |
+| `baseline_scorecard.csv`, `standard_index_scorecard.csv` | Scorecards for the two index builds |
+| `EVALUATION_REPORT.md`, `EVALUATION_RESULTS.md` | Evaluation write-ups |
+| `ONTOLOGY_VALIDATION_REPORT.md` | Ontology schema and conformance check |
+| `app.py` | Streamlit demo with a password gate |
+| `gradio_app.py` | Gradio demo |
+| `requirements.txt` | Pinned dependencies |
+
+Generated folders (`output/`, `logs/`, `cache/`, `lancedb/`, `*.parquet`) are listed in `.gitignore`, so the repository does **not** contain a ready-made index. You need to build it (see below).
+
+---
+
+## Getting started
+
+### Requirements
+- Python 3.10+ (developed in Google Colab)
+- A Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey)
+- The models used in the experiment: `gemini-3.5-flash-lite` for completions and `gemini-embedding-001` for embeddings (3072-dimension vectors). Model names change over time, so edit them in `settings.yaml` if they are no longer available.
+
+### Install
+```bash
+pip install -r requirements.txt
+pip install streamlit        # only needed for app.py
+```
+In Colab, restart the runtime after installing so the pinned NumPy and pandas versions are the ones actually loaded.
+
+### Set your key (never put it in a file)
+In Colab, add a secret named `GEMINI_API_KEY` and turn on notebook access, then expose it as an environment variable. Elsewhere:
+```bash
+export GEMINI_API_KEY="your-key-here"
+```
+`settings.yaml` refers to the key as `${GEMINI_API_KEY}`, so the value never appears in the file.
+
+### Build the index
+This step makes many model calls and uses your API quota.
+```bash
+graphrag index --root ./standard_experiment --method standard
+```
+The free tier can return a rate-limit error (HTTP 429). If that happens, wait and try again.
+
+### Ask questions
+Use the query command with the local search method, and see its options with:
+```bash
+graphrag query --help
+```
+Local search suits specific questions about entities and how they relate.
+
+### Run the demo apps
+```bash
+streamlit run app.py        # asks for a demo password; see the top of app.py for how it is set
+python gradio_app.py
+```
+Both load the saved index and do not rebuild it. If you share a public link to a demo, remember that every question uses **your** API quota.
+
+---
+
+## Known issues
+
+- **Duplicate entity:** the graph contains both `CIRCUIT BREAKER` and `CIRCUIT BREAKERS`. The singular form is one of 3 entities with no relationships (the others are `SERVICE A` and `SERVICE-LEVEL OBJECTIVES`, and `DISTRIBUTED SYSTEM` was reported disconnected in the same check). The duplicate check in the notebook did not catch plurals.
+- **Tiny chunks:** the experiment used 100-token chunks with 10 tokens of overlap (the default is 1200), chosen to force several chunks from a very small corpus. Some chunks end in the middle of a sentence.
+- **Ontology coverage:** the conformance audit compares entity **types**. The framework's extraction does not enforce relationship types or the other rules in `ontology.yaml`.
+- **Version pins:** `requirements.txt` was generated in Colab. Check it in a fresh environment before relying on it.
+
+## Limitations
+
+- **Very small corpus:** three documents, about 323 tokens, five chunks. At this size a model could read everything at once, so the results say little about how GraphRAG behaves on real collections.
+- **No baseline:** there is no plain-RAG comparison and no multi-hop question set yet, so this repository does not show whether the graph improves answers.
+- **Hand-graded, 8 questions:** the pass rate is a rough indicator only.
+- **Cost and latency:** indexing makes many model calls, and a query took about 13 seconds.
+- **Prototype security:** the demo password gate is basic and not suitable for sensitive data.
+
+## Ideas for next steps
+
+- Add a plain-RAG baseline and a larger corpus with multi-hop questions, and compare both on the same questions.
+- Merge near-duplicate entities and re-run the quality report.
+- Enforce relationship types and rules from the ontology, not only entity types.
+- Try global search for broad questions and compare it with local search.
+- Add a larger evaluation set and a scripted evaluation run.
+
+---
+
+## Security
+
+- Never commit API keys, `.env` files or notebook outputs that print them. If a key is ever shown or committed, **revoke it in AI Studio and create a new one**; removing it from the file is not enough because it stays in the Git history.
+- Clear notebook outputs and remove temporary public share links before publishing.
+
+## Notes
+
+This is a learning project. The code and configuration were developed with AI assistance and then run, inspected and evaluated step by step in the notebook.
+
+## Acknowledgements
+
+Built on Microsoft's [GraphRAG](https://github.com/microsoft/graphrag) and the Gemini API. Check each project's license before reusing their code or prompts.
